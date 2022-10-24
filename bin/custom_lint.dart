@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:architecture_linter/configuration_reader/configuration_reader.dart';
+import 'package:architecture_linter/extensions/string_extensions.dart';
 import 'package:architecture_linter/project_name_reader/project_name_reader.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
