@@ -17,16 +17,22 @@ class ArchitectureLinter extends PluginBase {
   final configReader = ConfigurationReader();
   final projectNameReader = ProjectNameReader();
 
+  String? rootProjectName;
+
   @override
   Stream<Lint> getLints(ResolvedUnitResult resolvedUnitResult) async* {
     final analysis = resolvedUnitResult;
     final components = analysis.libraryElement.entryPoint?.location?.components;
-    final rootProjectName = projectNameReader.readRootName(components);
 
-    if (rootProjectName.isEmpty) return;
+    final rootName = projectNameReader.readRootName(components);
+    if (rootName.isNotEmpty) {
+      rootProjectName = rootName;
+    }
+
+    if (rootProjectName == null) return;
 
     final path = analysis.path; // Absolute path for analyzed file
-    final packagePath = path.trimTo(rootProjectName); // Absolute path from start to `rootProjectName`
+    final packagePath = path.trimTo(rootProjectName!); // Absolute path from start to `rootProjectName`
     final libraryPath = "$packagePath/lib";
 
     if (!path.startsWith(libraryPath)) {

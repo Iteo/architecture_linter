@@ -5,7 +5,7 @@ class ProjectNameReader {
 
   String readRootName(List<String>? components, {entryPoint = 'main'}) {
     final packageIdPattern = r'(.+:.+\/' + '$entryPoint' + ')'; // A:B/C
-    var rootName = "";
+    var rootName = '';
 
     if (components == null || components.isEmpty) return rootName;
     if (!parser.containsSegment(components, entryPoint)) return rootName;
