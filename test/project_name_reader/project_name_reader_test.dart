@@ -10,7 +10,7 @@ void main() {
       // When
       final result = reader.readRootName(components);
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns empty phrase for empty list of components', () {
@@ -20,7 +20,7 @@ void main() {
       // When
       final result = reader.readRootName(components);
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns empty phrase for components not matching package pattern', () {
@@ -30,7 +30,7 @@ void main() {
       // When
       final result = reader.readRootName(components);
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns empty phrase for components not matching entry point', () {
@@ -40,7 +40,7 @@ void main() {
       // When
       final result = reader.readRootName(components, entryPoint: 'main');
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns root phrase for at least one matching patter component', () {
@@ -50,7 +50,7 @@ void main() {
       // When
       final result = reader.readRootName(components, entryPoint: 'main');
       // Then
-      assert(result == 'test1');
+      expect(result, 'test1');
     });
   });
 }

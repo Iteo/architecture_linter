@@ -9,7 +9,7 @@ void main() {
       // When
       final result = content.trimTo('');
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns empty result for blank argument', () {
@@ -18,7 +18,7 @@ void main() {
       // When
       final result = content.trimTo('test');
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns empty result for unknown phrase in string', () {
@@ -27,7 +27,7 @@ void main() {
       // When
       final result = content.trimTo('test');
       // Then
-      assert(result.isEmpty);
+      expect(result.isEmpty, true);
     });
 
     test('Returns substring till first occurrence of phrase in string', () {
@@ -36,7 +36,7 @@ void main() {
       // When
       final result = content.trimTo('test');
       // Then
-      assert(result == 'This test');
+      expect(result, 'This test');
     });
 
     test('Returns whole string when it ends with phrase', () {
@@ -45,7 +45,7 @@ void main() {
       // When
       final result = content.trimTo('test');
       // Then
-      assert(result == content);
+      expect(result, content);
     });
   });
 }
