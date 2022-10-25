@@ -1,4 +1,4 @@
-import '../configuration/regex.dart';
+import 'regex.dart';
 
 class Layer {
   final String displayName;

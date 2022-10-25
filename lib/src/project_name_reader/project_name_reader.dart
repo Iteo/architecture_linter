@@ -1,4 +1,4 @@
-import 'package:architecture_linter/component_parser/component_parser.dart';
+import 'package:architecture_linter/src/component_parser/component_parser.dart';
 
 class ProjectNameReader {
   final parser = ComponentParser();

@@ -1,4 +1,4 @@
-import 'package:architecture_linter/project_name_reader/project_name_reader.dart';
+import 'package:architecture_linter/src/project_name_reader/project_name_reader.dart';
 import 'package:test/test.dart';
 
 void main() {

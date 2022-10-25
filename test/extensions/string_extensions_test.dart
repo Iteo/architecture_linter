@@ -1,4 +1,4 @@
-import 'package:architecture_linter/extensions/string_extensions.dart';
+import 'package:architecture_linter/src/extensions/string_extensions.dart';
 import 'package:test/test.dart';
 
 void main() {
