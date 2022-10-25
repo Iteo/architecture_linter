@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:core';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/results.dart';
@@ -6,12 +6,13 @@ import 'package:architecture_linter/src/configuration_reader/configuration_reade
 import 'package:architecture_linter/src/extensions/string_extensions.dart';
 import 'package:architecture_linter/src/project_name_reader/project_name_reader.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
+import 'package:architecture_linter/src/configuration/layer.dart';
 
 void main(List<String> args, SendPort port) {
-  startPlugin(port, _LintPlugin());
+  startPlugin(port, ArchitectureLinter());
 }
 
-class _LintPlugin extends PluginBase {
+class ArchitectureLinter extends PluginBase {
   final configReader = ConfigurationReader();
   final projectNameReader = ProjectNameReader();
 
@@ -39,5 +40,48 @@ class _LintPlugin extends PluginBase {
       message: 'Your project name is $rootProjectName, and layer names = $layers',
       location: analysis.lintLocationFromOffset(0, length: analysis.content.length),
     );
+
+    final layerRuleList = config.layers;
+    final ruleForFile = layerRuleList.getRuleFromPath(currentPath);
+
+    if (ruleForFile != null) {
+      final unit = analysis.unit;
+
+      final importDirectives = unit.directives.whereType<ImportDirective>().toList();
+
+      for (final element in importDirectives) {
+        if (element.containsBannedLayer(ruleForFile)) {
+          yield Lint(
+            code: 'architecture_linter_banned_layer',
+            //TODO change message to proper one
+            message: 'Bro, dont.',
+            location: resolvedUnitResult.lintLocationFromOffset(
+              element.offset,
+              length: element.length,
+            ),
+          );
+        }
+      }
+    }
+  }
+}
+
+extension on List<Layer> {
+  Layer? getRuleFromPath(String currentPath) {
+    try {
+      return firstWhere((element) => currentPath.contains(element.layer));
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
+extension on ImportDirective {
+  bool containsBannedLayer(Layer rule) {
+    for (final bannedLayer in rule.bannedLayers) {
+      final containsLayer = toString().contains('$bannedLayer/');
+      if (containsLayer) return true;
+    }
+    return false;
   }
 }
