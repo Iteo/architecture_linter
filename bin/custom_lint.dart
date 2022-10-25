@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:isolate';
 
 import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:architecture_linter/src/configuration_reader/configuration_reader.dart';
 import 'package:architecture_linter/src/extensions/string_extensions.dart';
 import 'package:architecture_linter/src/project_name_reader/project_name_reader.dart';
@@ -41,8 +42,8 @@ class ArchitectureLinter extends PluginBase {
       location: analysis.lintLocationFromOffset(0, length: analysis.content.length),
     );
 
-    final layerRuleList = config.layers;
-    final ruleForFile = layerRuleList.getRuleFromPath(currentPath);
+    final layerRuleList = config.bannedImports;
+    final ruleForFile = layerRuleList.getRuleFromPath(path);
 
     if (ruleForFile != null) {
       final unit = analysis.unit;
@@ -50,7 +51,7 @@ class ArchitectureLinter extends PluginBase {
       final importDirectives = unit.directives.whereType<ImportDirective>().toList();
 
       for (final element in importDirectives) {
-        if (element.containsBannedLayer(ruleForFile)) {
+        if (element.containsBannedLayer(layerRuleList[ruleForFile]!)) {
           yield Lint(
             code: 'architecture_linter_banned_layer',
             //TODO change message to proper one
@@ -66,20 +67,26 @@ class ArchitectureLinter extends PluginBase {
   }
 }
 
-extension on List<Layer> {
+extension on Map<Layer, Set<Layer>> {
   Layer? getRuleFromPath(String currentPath) {
     try {
-      return firstWhere((element) => currentPath.contains(element.layer));
+      for (final entry in entries) {
+        if (entry.value.any((element) => currentPath.contains(element.displayName))) {
+          return entry.key;
+        }
+      }
     } catch (_) {
       return null;
     }
+
+    return null;
   }
 }
 
 extension on ImportDirective {
-  bool containsBannedLayer(Layer rule) {
-    for (final bannedLayer in rule.bannedLayers) {
-      final containsLayer = toString().contains('$bannedLayer/');
+  bool containsBannedLayer(Set<Layer> rules) {
+    for (final bannedLayer in rules) {
+      final containsLayer = toString().contains('${bannedLayer.displayName}/');
       if (containsLayer) return true;
     }
     return false;
