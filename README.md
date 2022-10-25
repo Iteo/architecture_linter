@@ -10,6 +10,7 @@ For general information about developing packages, see the Dart guide for
 and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
+# architecture_linter
 
 Package architecture_linter helps you to keep your project right order. You can specify many rules (described below) that will be checked for suggestions and displayed in form of useful lints in your favorite IDE. 
 
