@@ -48,8 +48,7 @@ class ArchitectureLinter extends PluginBase {
     final layerForFile = layerRuleList.getLayerForPath(path);
     if (layerForFile == null) return;
 
-    final lints = _getImportLints(analysis, layerForFile);
-    for (final lint in lints) {
+    for (final lint in _getImportLints(analysis, layerForFile)) {
       yield lint;
     }
   }
@@ -81,28 +80,23 @@ class ArchitectureLinter extends PluginBase {
     );
   }
 
-  List<Lint> _getImportLints(ResolvedUnitResult analysis, Pair<Layer, Set<Layer>> layerRule) {
+  Iterable<Lint> _getImportLints(ResolvedUnitResult analysis, Pair<Layer, Set<Layer>> layerRule) sync* {
     final importDirectives = analysis.unit.directives.whereType<ImportDirective>().toList();
-    final List<Lint> lints = [];
 
     for (final import in importDirectives) {
       final bannedLayers = layerRule.last;
 
       if (import.containsBannedLayer(bannedLayers)) {
-        lints.add(
-          Lint(
-            code: 'architecture_linter_banned_layer',
-            //TODO change message to proper one
-            message: 'Bro, dont.',
-            location: analysis.lintLocationFromOffset(
-              import.offset,
-              length: import.length,
-            ),
+        yield Lint(
+          code: 'architecture_linter_banned_layer',
+          //TODO change message to proper one
+          message: 'Bro, dont.',
+          location: analysis.lintLocationFromOffset(
+            import.offset,
+            length: import.length,
           ),
         );
       }
     }
-
-    return lints;
   }
 }
