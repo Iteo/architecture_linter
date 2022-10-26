@@ -18,6 +18,7 @@ void main(List<String> args, SendPort port) {
   startPlugin(port, ArchitectureLinter());
 }
 
+// TODO Create error mechanism for cases with configuration
 class ArchitectureLinter extends PluginBase {
   final configReader = ConfigurationReader();
   final projectNameReader = ProjectNameReader();
