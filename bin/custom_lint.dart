@@ -1,69 +1,103 @@
+import 'dart:core';
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:architecture_linter/src/layer_rule.dart';
+import 'package:analyzer_plugin/utilities/pair.dart';
+import 'package:architecture_linter/src/configuration/project_configuration.dart';
+import 'package:architecture_linter/src/configuration_reader/configuration_reader.dart';
+import 'package:architecture_linter/src/extensions/layer_extensions.dart';
+import 'package:architecture_linter/src/extensions/string_extensions.dart';
+import 'package:architecture_linter/src/project_name_reader/project_name_reader.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
+import 'package:architecture_linter/src/configuration/layer.dart';
+import 'package:architecture_linter/src/extensions/custom_lint_extensions.dart';
 
-void main(List<String> args, SendPort sendPort) {
-  startPlugin(sendPort, ArchitectureLinter());
+void main(List<String> args, SendPort port) {
+  startPlugin(port, ArchitectureLinter());
 }
 
+// TODO Create error mechanism for cases with configuration
 class ArchitectureLinter extends PluginBase {
+  final configReader = ConfigurationReader();
+  final projectNameReader = ProjectNameReader();
+
+  String? rootProjectName;
+  ProjectConfiguration? config;
+
   @override
   Stream<Lint> getLints(ResolvedUnitResult resolvedUnitResult) async* {
-    final currentPath = resolvedUnitResult.path;
-    final layerRuleList = _getLayerRuleList();
-    final ruleForFile = layerRuleList.getRuleFromPath(currentPath);
+    final analysis = resolvedUnitResult;
 
-    if (ruleForFile != null) {
-      final unit = resolvedUnitResult.unit;
+    _resolveRootName(resolvedUnitResult);
+    if (rootProjectName == null) return;
 
-      final importDirectives = unit.directives.whereType<ImportDirective>().toList();
+    final path = analysis.path;
+    final packagePath = path.trimTo(rootProjectName!);
 
-      for (final element in importDirectives) {
-        if (element.containsBannedLayer(ruleForFile)) {
-          yield Lint(
-            code: 'architecture_linter_banned_layer',
-            //TODO change message to proper one
-            message: 'Bro, dont.',
-            location: resolvedUnitResult.lintLocationFromOffset(
-              element.offset,
-              length: element.length,
-            ),
-          );
-        }
+    if (!path.startsWith('$packagePath/lib')) return;
+
+    _resolveProjectConfiguration(packagePath);
+    if (config == null) return;
+
+    // TODO Remove in future
+    // For now leave for debugging
+    yield _getLayersLint(analysis, config!);
+
+    final layerRuleList = config!.bannedImports;
+    final layerForFile = layerRuleList.getLayerForPath(path);
+    if (layerForFile == null) return;
+
+    for (final lint in _getImportLints(analysis, layerForFile)) {
+      yield lint;
+    }
+  }
+
+  void _resolveRootName(ResolvedUnitResult analysis) {
+    if (rootProjectName != null) return;
+
+    final components = analysis.libraryElement.entryPoint?.location?.components;
+    final rootName = projectNameReader.readRootName(components);
+    if (rootName.isNotEmpty) {
+      rootProjectName = rootName;
+    }
+  }
+
+  Future _resolveProjectConfiguration(String packagePath) async {
+    if (config != null) return;
+    config = await configReader.readConfiguration(packagePath, "architecture.yaml");
+  }
+
+  Lint _getLayersLint(ResolvedUnitResult analysis, ProjectConfiguration config) {
+    final layers = config.layers.map((e) => e.displayName).join(", ");
+    return Lint(
+      code: 'architecture_configuration',
+      message: 'Your project name is $rootProjectName, and layer names = $layers',
+      location: analysis.lintLocationFromOffset(
+        max(0, analysis.content.length - 1),
+        length: analysis.content.length,
+      ),
+    );
+  }
+
+  Iterable<Lint> _getImportLints(ResolvedUnitResult analysis, Pair<Layer, Set<Layer>> layerRule) sync* {
+    final importDirectives = analysis.unit.directives.whereType<ImportDirective>().toList();
+
+    for (final import in importDirectives) {
+      final bannedLayers = layerRule.last;
+
+      if (import.containsBannedLayer(bannedLayers)) {
+        yield Lint(
+          code: 'architecture_linter_banned_layer',
+          //TODO change message to proper one
+          message: 'Bro, dont.',
+          location: analysis.lintLocationFromOffset(
+            import.offset,
+            length: import.length,
+          ),
+        );
       }
     }
-  }
-}
-
-List<LayerRule> _getLayerRuleList() {
-  //TODO get rules from config file
-  return [
-    LayerRule(
-      bannedLayers: ['domain', 'data'],
-      layer: 'presentation',
-    ),
-  ];
-}
-
-extension on List<LayerRule> {
-  LayerRule? getRuleFromPath(String currentPath) {
-    try {
-      return firstWhere((element) => currentPath.contains(element.layer));
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
-extension on ImportDirective {
-  bool containsBannedLayer(LayerRule rule) {
-    for (final bannedLayer in rule.bannedLayers) {
-      final containsLayer = toString().contains('$bannedLayer/');
-      if (containsLayer) return true;
-    }
-    return false;
   }
 }
