@@ -54,7 +54,7 @@ class ArchitectureLinter extends PluginBase {
     }
 
     if (configurationRemark?.severity == LintSeverity.error) {
-      // For serious problems don't proceed with lint checking
+      // For serious problems don't continue anyways
       return;
     }
 
@@ -77,7 +77,7 @@ class ArchitectureLinter extends PluginBase {
       if (rootName.isNotEmpty) {
         rootProjectName = rootName;
       }
-    } catch (e) {
+    } catch (_) {
       // The analysis may find problems for unwanted files
       // so we ignore any errors here
       return;
@@ -95,9 +95,9 @@ class ArchitectureLinter extends PluginBase {
         packagePath,
         fileConfig.filePath,
       );
-    } catch (e) {
+    } catch (error) {
       if (fileConfig.allowsError) {
-        // TODO Finish
+        print("The linter configuration file couldn't be read, $error");
       }
     }
   }
@@ -159,6 +159,25 @@ class ArchitectureLinter extends PluginBase {
         LintSeverity.warning,
       );
     }
+
+    if (projectConfig!.bannedImports.isEmpty) {
+      return ConfigurationRemark(
+        Lint(
+          code: 'architecture_linter_banned_imports_not_found',
+          message: 'Configuration file does not have banned imports declared',
+          correction: "Make sure that the architecture config file contains"
+              " section `bannedImports:` with at least one entry. Check README "
+              "for more information how to declare proper config. structure.",
+          location: analysis.lintLocationFromOffset(
+            max(0, analysis.content.length - 1),
+            length: analysis.content.length,
+          ),
+        ),
+        LintSeverity.info,
+      );
+    }
+
+    // TODO Add more useful info lints
 
     return null;
   }
