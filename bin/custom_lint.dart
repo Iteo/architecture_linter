@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/utilities/pair.dart';
+import 'package:architecture_linter/src/configuration/configuration_remark.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:architecture_linter/src/configuration_reader/configuration_reader.dart';
 import 'package:architecture_linter/src/extensions/layer_extensions.dart';
@@ -47,13 +48,13 @@ class ArchitectureLinter extends PluginBase {
       fileConfig,
     );
 
-    final configurationRemark = _getConfigurationRemarkLint(
-      analysis,
-      fileConfig,
-    );
+    final configurationRemark = _getConfigurationRemark(analysis);
+    if (isRemarkValidToShow(configurationRemark)) {
+      yield configurationRemark!.lint;
+    }
 
-    if (configurationRemark != null) {
-      yield configurationRemark;
+    if (configurationRemark?.severity == LintSeverity.error) {
+      // For serious problems don't proceed with lint checking
       return;
     }
 
@@ -95,7 +96,9 @@ class ArchitectureLinter extends PluginBase {
         fileConfig.filePath,
       );
     } catch (e) {
-      if (fileConfig.allowsError) {}
+      if (fileConfig.allowsError) {
+        // TODO Finish
+      }
     }
   }
 
@@ -125,25 +128,41 @@ class ArchitectureLinter extends PluginBase {
     }
   }
 
-  Lint? _getConfigurationRemarkLint(
-    ResolvedUnitResult analysis,
-    ArchitectureFileConfiguration fileConfig,
-  ) {
-    if (projectConfig == null && fileConfig.allowsError) {
-      return Lint(
-        code: 'architecture_linter_configuration_not_found',
-        message: 'There is no ${fileConfig.filePath} in project to read',
-        location: analysis.lintLocationFromOffset(
-          max(0, analysis.content.length - 1),
-          length: analysis.content.length,
+  ConfigurationRemark? _getConfigurationRemark(ResolvedUnitResult analysis) {
+    if (projectConfig == null) {
+      return ConfigurationRemark(
+        Lint(
+          code: 'architecture_linter_configuration_not_found',
+          message: 'There is no ${fileConfig.filePath} in project to read',
+          location: analysis.lintLocationFromOffset(
+            max(0, analysis.content.length - 1),
+            length: analysis.content.length,
+          ),
         ),
+        LintSeverity.error,
       );
     }
 
-    // if (projectConfig?.layers.isNotEmpty ==) {
-    //
-    // }
+    if (projectConfig!.layers.isEmpty) {
+      return ConfigurationRemark(
+        Lint(
+          code: 'architecture_linter_layers_not_found',
+          message: 'Configuration file does not have layers declared',
+          correction: "Make sure that the architecture config file contains"
+              " section `layers:` with at least one entry. Check README "
+              "for more information how to declare proper config. structure.",
+          location: analysis.lintLocationFromOffset(
+            max(0, analysis.content.length - 1),
+            length: analysis.content.length,
+          ),
+        ),
+        LintSeverity.warning,
+      );
+    }
 
     return null;
   }
+
+  bool isRemarkValidToShow(ConfigurationRemark? remark) =>
+      remark != null && fileConfig.checkSeverity.contains(remark.severity);
 }
