@@ -43,7 +43,7 @@ class ArchitectureLinter extends PluginBase {
     // We want to check only files in scope of the main package
     if (!path.startsWith('$packagePath/lib')) return;
 
-    _resolveProjectConfiguration(
+    await _resolveProjectConfiguration(
       packagePath,
       fileConfig,
     );
@@ -84,7 +84,7 @@ class ArchitectureLinter extends PluginBase {
     }
   }
 
-  Future _resolveProjectConfiguration(
+  Future<void> _resolveProjectConfiguration(
     String packagePath,
     ArchitectureFileConfiguration fileConfig,
   ) async {
