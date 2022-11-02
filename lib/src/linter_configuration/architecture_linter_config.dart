@@ -9,11 +9,9 @@ class ArchitectureFileConfiguration {
   final String filePath;
   final List<LintSeverity> checkSeverity;
 
-  // TODO Correct names
+  get isErrorToCheck => checkSeverity.contains(LintSeverity.error);
 
-  get allowsError => checkSeverity.contains(LintSeverity.error);
+  get isWarningToCheck => checkSeverity.contains(LintSeverity.warning);
 
-  get allowsWarning => checkSeverity.contains(LintSeverity.warning);
-
-  get allowsInfo => checkSeverity.contains(LintSeverity.info);
+  get isInfoToCheck => checkSeverity.contains(LintSeverity.info);
 }

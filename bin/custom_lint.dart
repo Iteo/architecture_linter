@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'dart:isolate';
-import 'dart:math';
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
@@ -97,7 +96,7 @@ class ArchitectureLinter extends PluginBase {
         fileConfig.filePath,
       );
     } catch (error) {
-      if (fileConfig.allowsError) {
+      if (fileConfig.isErrorToCheck) {
         print("The linter configuration file couldn't be read, $error");
       }
     }
