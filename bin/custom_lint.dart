@@ -12,6 +12,7 @@ import 'package:architecture_linter/src/extensions/layer_extensions.dart';
 import 'package:architecture_linter/src/extensions/string_extensions.dart';
 import 'package:architecture_linter/src/linter_configuration/architecture_linter_config.dart';
 import 'package:architecture_linter/src/linter_configuration/linter_configuration.dart';
+import 'package:architecture_linter/src/lints/Lints.dart';
 import 'package:architecture_linter/src/project_name_reader/project_name_reader.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
@@ -49,7 +50,7 @@ class ArchitectureLinter extends PluginBase {
     );
 
     final configurationRemark = _getConfigurationRemark(analysis);
-    if (isRemarkValidToShow(configurationRemark)) {
+    if (_checkRemarkValidToShow(configurationRemark)) {
       yield configurationRemark!.lint;
     }
 
@@ -114,16 +115,7 @@ class ArchitectureLinter extends PluginBase {
       final bannedLayers = layerRule.last;
 
       if (import.containsBannedLayer(bannedLayers)) {
-        yield Lint(
-          severity: LintSeverity.warning,
-          code: 'architecture_linter_banned_layer',
-          message: 'Layer ${currentLayer.displayName} '
-              'cannot have ${import.uri}',
-          location: analysis.lintLocationFromOffset(
-            import.offset,
-            length: import.length,
-          ),
-        );
+        yield analysis.getBannedLayerLint(import, currentLayer.displayName);
       }
     }
   }
@@ -131,57 +123,28 @@ class ArchitectureLinter extends PluginBase {
   ConfigurationRemark? _getConfigurationRemark(ResolvedUnitResult analysis) {
     if (projectConfig == null) {
       return ConfigurationRemark(
-        Lint(
-          code: 'architecture_linter_configuration_not_found',
-          message: 'There is no ${fileConfig.filePath} in project to read',
-          location: analysis.lintLocationFromOffset(
-            max(0, analysis.content.length - 1),
-            length: analysis.content.length,
-          ),
-        ),
+        analysis.getConfigurationNotFoundLint(fileConfig.filePath),
         LintSeverity.error,
       );
     }
 
     if (projectConfig!.layers.isEmpty) {
       return ConfigurationRemark(
-        Lint(
-          code: 'architecture_linter_layers_not_found',
-          message: 'Configuration file does not have layers declared',
-          correction: "Make sure that the architecture config file contains"
-              " section `layers:` with at least one entry. Check README "
-              "for more information how to declare proper config. structure.",
-          location: analysis.lintLocationFromOffset(
-            max(0, analysis.content.length - 1),
-            length: analysis.content.length,
-          ),
-        ),
+        analysis.getLayersNotFoundLint(),
         LintSeverity.warning,
       );
     }
 
     if (projectConfig!.bannedImports.isEmpty) {
       return ConfigurationRemark(
-        Lint(
-          code: 'architecture_linter_banned_imports_not_found',
-          message: 'Configuration file does not have banned imports declared',
-          correction: "Make sure that the architecture config file contains"
-              " section `bannedImports:` with at least one entry. Check README "
-              "for more information how to declare proper config. structure.",
-          location: analysis.lintLocationFromOffset(
-            max(0, analysis.content.length - 1),
-            length: analysis.content.length,
-          ),
-        ),
+        analysis.getBannedImportsNotFoundLint(),
         LintSeverity.info,
       );
     }
 
-    // TODO Add more useful info lints
-
     return null;
   }
 
-  bool isRemarkValidToShow(ConfigurationRemark? remark) =>
+  bool _checkRemarkValidToShow(ConfigurationRemark? remark) =>
       remark != null && fileConfig.checkSeverity.contains(remark.severity);
 }
