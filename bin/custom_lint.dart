@@ -10,7 +10,6 @@ import 'package:architecture_linter/src/configuration_reader/configuration_reade
 import 'package:architecture_linter/src/extensions/layer_extensions.dart';
 import 'package:architecture_linter/src/extensions/string_extensions.dart';
 import 'package:architecture_linter/src/linter_configuration/architecture_linter_config.dart';
-import 'package:architecture_linter/src/linter_configuration/linter_configuration.dart';
 import 'package:architecture_linter/src/lints/Lints.dart';
 import 'package:architecture_linter/src/project_name_reader/project_name_reader.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
@@ -22,7 +21,7 @@ void main(List<String> args, SendPort port) {
 }
 
 class ArchitectureLinter extends PluginBase {
-  final fileConfig = ArchitectureLinterConfiguration.fileConfig;
+  final fileConfig = ArchitectureFileConfiguration.instance;
   final configReader = ConfigurationReader();
   final projectNameReader = ProjectNameReader();
 

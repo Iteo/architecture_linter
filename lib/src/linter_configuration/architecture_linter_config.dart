@@ -1,10 +1,16 @@
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
 class ArchitectureFileConfiguration {
-  ArchitectureFileConfiguration({
-    this.filePath = 'architecture.yaml',
-    this.checkSeverity = LintSeverity.values,
+  ArchitectureFileConfiguration._({
+    required this.filePath,
+    required this.checkSeverity,
   });
+
+  static final ArchitectureFileConfiguration instance =
+      ArchitectureFileConfiguration._(
+    filePath: 'architecture.yaml',
+    checkSeverity: LintSeverity.values,
+  );
 
   final String filePath;
   final List<LintSeverity> checkSeverity;
