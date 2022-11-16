@@ -20,51 +20,52 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting started
 
-Create `architecture.yaml` file with expected configuration. You can start with predefined one:
+Add configuration to `analysis_options.yaml` file. You can start with predefined one:
 ```YAML
-layers:
-  - &infrastructureLayer
-    name: "Infrastructure"
-    pathRegex:
-      source: "(infrastructure)"
-  - &domainLayer
-    name: "Domain"
-    pathRegex:
-      source: "(domain)"
-  - &presentationLayer
-    name: "Presentation"
-    pathRegex:
-      source: "(presentation)"
-  - &useCaseLayer
-    name: "Domain/UseCases"
-    pathRegex:
-      source: "(domain/use_cases)"
-  - &utils
-    name: "Utils"
-    pathRegex:
-      source: "(utils)"
-  - &infrastructureLayer
-    name: "Infrastructure"
-    pathRegex:
-      source: "(infrastructure)"
+architecture_linter:
+  layers:
+    - &infrastructureLayer
+      name: "Infrastructure"
+      pathRegex:
+        source: "(infrastructure)"
+    - &domainLayer
+      name: "Domain"
+      pathRegex:
+        source: "(domain)"
+    - &presentationLayer
+      name: "Presentation"
+      pathRegex:
+        source: "(presentation)"
+    - &useCaseLayer
+      name: "Domain/UseCases"
+      pathRegex:
+        source: "(domain/use_cases)"
+    - &utils
+      name: "Utils"
+      pathRegex:
+        source: "(utils)"
+    - &infrastructureLayer
+      name: "Infrastructure"
+      pathRegex:
+        source: "(infrastructure)"
 
-bannedImports:
-  - layer: *domainLayer
-    banned:
-      - *presentationLayer
-      - *useCaseLayer
-      - *infrastructureLayer
-  - layer: *presentationLayer
-    banned:
-      - *infrastructureLayer
-  - layer: *infrastructureLayer
-    banned:
-      - *useCaseLayer
-      - *presentationLayer
-  - layer: *useCaseLayer
-    banned:
-      - *presentationLayer
-      - *infrastructureLayer
+  bannedImports:
+    - layer: *domainLayer
+      banned:
+        - *presentationLayer
+        - *useCaseLayer
+        - *infrastructureLayer
+    - layer: *presentationLayer
+      banned:
+        - *infrastructureLayer
+    - layer: *infrastructureLayer
+      banned:
+        - *useCaseLayer
+        - *presentationLayer
+    - layer: *useCaseLayer
+      banned:
+        - *presentationLayer
+        - *infrastructureLayer
 ```
 
 ## Usage

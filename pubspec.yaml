@@ -6,9 +6,8 @@ environment:
   sdk: '>=2.18.2 <3.0.0'
 
 dependencies:
-  analyzer: 4.6.0
-  analyzer_plugin: 0.10.0
-  custom_lint_builder: 0.0.12
+  analyzer: 5.2.0
+  analyzer_plugin: 0.11.2
 
 dev_dependencies:
   lints: ^2.0.0
