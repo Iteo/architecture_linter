@@ -23,10 +23,17 @@ void main() {
       expect(result.isEmpty, true);
     });
 
-    test('Returns empty phrase for components not matching package pattern', () {
+    test('Returns empty phrase for components not matching package pattern',
+        () {
       // Given
       final reader = ProjectNameReader();
-      final components = ['package', 'package:', '/main', '/main/lib', 'package:text'];
+      final components = [
+        'package',
+        'package:',
+        '/main',
+        '/main/lib',
+        'package:text'
+      ];
       // When
       final result = reader.readRootName(components);
       // Then

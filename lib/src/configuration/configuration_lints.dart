@@ -15,7 +15,8 @@ class ConfigurationLints {
         ),
         "There was an error while reading configuration.",
         'architecture_linter_config_file_error',
-        correction: "Make sure that analysis_option.yaml contains architecture_linter: part",
+        correction:
+            "Make sure that analysis_option.yaml contains architecture_linter: part",
       );
 
   static AnalysisError configurationNoLayersLint(String path) => AnalysisError(
@@ -35,7 +36,8 @@ class ConfigurationLints {
             "for more information how to declare proper config. structure.",
       );
 
-  static AnalysisError configurationNoBannedImportsLint(String path) => AnalysisError(
+  static AnalysisError configurationNoBannedImportsLint(String path) =>
+      AnalysisError(
         AnalysisErrorSeverity.WARNING,
         AnalysisErrorType.SYNTACTIC_ERROR,
         Location(

@@ -9,7 +9,8 @@ class ConfigurationReader {
   ProjectConfiguration readConfiguration(File optionsFile) {
     try {
       final node = loadYamlNode(optionsFile.readAsStringSync());
-      final optionNode = node is YamlMap ? yamlMapToDartMap(node) : <String, Object>{};
+      final optionNode =
+          node is YamlMap ? yamlMapToDartMap(node) : <String, Object>{};
 
       final rootConfig = optionNode[_rootKey] as Map<String, dynamic>;
       return ProjectConfiguration.fromMap(rootConfig);
@@ -19,13 +20,14 @@ class ConfigurationReader {
   }
 }
 
-Map<String, Object> yamlMapToDartMap(YamlMap map) => Map.unmodifiable(Map<String, Object>.fromEntries(map.nodes.keys
-    .whereType<YamlScalar>()
-    .where((key) => key.value is String && map.nodes[key]?.value != null)
-    .map((key) => MapEntry(
-          key.value as String,
-          yamlNodeToDartObject(map.nodes[key]),
-        ))));
+Map<String, Object> yamlMapToDartMap(YamlMap map) =>
+    Map.unmodifiable(Map<String, Object>.fromEntries(map.nodes.keys
+        .whereType<YamlScalar>()
+        .where((key) => key.value is String && map.nodes[key]?.value != null)
+        .map((key) => MapEntry(
+              key.value as String,
+              yamlNodeToDartObject(map.nodes[key]),
+            ))));
 
 /// Convert yaml [node] to Dart [Object].
 Object yamlNodeToDartObject(YamlNode? node) {
@@ -42,6 +44,7 @@ Object yamlNodeToDartObject(YamlNode? node) {
   return object;
 }
 
-List<Object> yamlListToDartList(YamlList list) => List.unmodifiable(list.nodes.map<Object>(yamlNodeToDartObject));
+List<Object> yamlListToDartList(YamlList list) =>
+    List.unmodifiable(list.nodes.map<Object>(yamlNodeToDartObject));
 
 Object yamlScalarToDartObject(YamlScalar scalar) => scalar.value as Object;
