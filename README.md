@@ -14,11 +14,43 @@ and the Flutter guide for
 
 Package architecture_linter helps you to keep your project right order. You can specify many rules (described below) that will be checked for suggestions and displayed in form of useful lints in your favorite IDE. 
 
-## Features
+## Installation
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+```sh
+$ dart pub add --dev architecture_linter
 
-## Getting started
+# or for a Flutter package
+$ flutter pub add --dev architecture_linter
+```
+
+## OR
+
+add it manually to `pubspec.yaml`
+
+```yaml
+dev_dependencies:
+  architecture_linter: ^0.0.1
+```
+
+and then run
+
+```sh
+$ dart pub get
+
+# or for a Flutter package
+$ flutter pub get
+```
+##Add plugin to analyzer
+
+Add this fragment to `analysis_option.yaml` so analyzer can use plugin:
+```yaml
+
+analyzer:
+    plugins:
+      - architecture_linter
+```
+
+## Basic configuration
 
 Add configuration to `analysis_options.yaml` file. You can start with predefined one:
 ```YAML
@@ -67,18 +99,3 @@ architecture_linter:
         - *presentationLayer
         - *infrastructureLayer
 ```
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
-```dart
-const like = 'sample';
-```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
