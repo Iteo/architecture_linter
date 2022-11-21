@@ -10,9 +10,9 @@ For general information about developing packages, see the Dart guide for
 and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
+# architecture_linter
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Package architecture_linter helps you to keep your project right order. You can specify many rules (described below) that will be checked for suggestions and displayed in form of useful lints in your favorite IDE. 
 
 ## Features
 
@@ -20,8 +20,53 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add configuration to `analysis_options.yaml` file. You can start with predefined one:
+```YAML
+architecture_linter:
+  layers:
+    - &infrastructureLayer
+      name: "Infrastructure"
+      pathRegex:
+        source: "(infrastructure)"
+    - &domainLayer
+      name: "Domain"
+      pathRegex:
+        source: "(domain)"
+    - &presentationLayer
+      name: "Presentation"
+      pathRegex:
+        source: "(presentation)"
+    - &useCaseLayer
+      name: "Domain/UseCases"
+      pathRegex:
+        source: "(domain/use_cases)"
+    - &utils
+      name: "Utils"
+      pathRegex:
+        source: "(utils)"
+    - &infrastructureLayer
+      name: "Infrastructure"
+      pathRegex:
+        source: "(infrastructure)"
+
+  bannedImports:
+    - layer: *domainLayer
+      banned:
+        - *presentationLayer
+        - *useCaseLayer
+        - *infrastructureLayer
+    - layer: *presentationLayer
+      banned:
+        - *infrastructureLayer
+    - layer: *infrastructureLayer
+      banned:
+        - *useCaseLayer
+        - *presentationLayer
+    - layer: *useCaseLayer
+      banned:
+        - *presentationLayer
+        - *infrastructureLayer
+```
 
 ## Usage
 
