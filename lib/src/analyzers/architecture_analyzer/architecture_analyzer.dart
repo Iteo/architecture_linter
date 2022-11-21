@@ -6,7 +6,8 @@ import '../../configuration/project_configuration.dart';
 import '../file_analyzers/file_analyzer.dart';
 
 class ArchitectureAnalyzer {
-  static List<AnalysisError> runAnalysis(ResolvedUnitResult unit, ProjectConfiguration config) {
+  static List<AnalysisError> runAnalysis(
+      ResolvedUnitResult unit, ProjectConfiguration config) {
     return generateAnalysisErrors(unit, config).toList();
   }
 
@@ -14,7 +15,8 @@ class ArchitectureAnalyzer {
     FileAnalyzerImports(),
   ];
 
-  static Iterable<AnalysisError> generateAnalysisErrors(ResolvedUnitResult unit, ProjectConfiguration config) sync* {
+  static Iterable<AnalysisError> generateAnalysisErrors(
+      ResolvedUnitResult unit, ProjectConfiguration config) sync* {
     for (final fileAnalyzer in currentFileAnalyzers) {
       final error = fileAnalyzer.analyzeFile(unit, config);
       if (error != null) yield error;

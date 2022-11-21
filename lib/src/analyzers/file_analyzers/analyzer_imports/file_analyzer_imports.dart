@@ -10,13 +10,15 @@ import '../../../configuration/project_configuration.dart';
 
 class FileAnalyzerImports implements FileAnalyzer {
   @override
-  AnalysisError? analyzeFile(ResolvedUnitResult unitResult, ProjectConfiguration config) {
+  AnalysisError? analyzeFile(
+      ResolvedUnitResult unitResult, ProjectConfiguration config) {
     final path = unitResult.path;
     final currentLayer = _returnCurrentLayerFromPath(path, config);
 
     if (currentLayer == null) return null;
 
-    final importDirectives = unitResult.unit.directives.whereType<ImportDirective>().toList();
+    final importDirectives =
+        unitResult.unit.directives.whereType<ImportDirective>().toList();
 
     for (final import in importDirectives) {
       final bannedLayers = config.bannedImports[currentLayer];

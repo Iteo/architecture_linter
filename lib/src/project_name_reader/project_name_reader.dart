@@ -11,7 +11,8 @@ class ProjectNameReader {
     if (!parser.containsSegment(components, entryPoint)) return rootName;
 
     // Find path variant that matches pattern 'package:root/path'
-    final foundComponent = parser.findMatching(components, RegExp(packageIdPattern));
+    final foundComponent =
+        parser.findMatching(components, RegExp(packageIdPattern));
     if (foundComponent == null) return rootName;
 
     final packageIdentifier = foundComponent.split("/").first;

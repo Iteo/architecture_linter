@@ -30,22 +30,26 @@ class ProjectConfiguration {
     final bannedImportsList = map['bannedImports'] == null
         ? <BannedImports>[]
         : List<BannedImports>.from(
-            (map['bannedImports'] as Iterable).map((x) => BannedImports.fromMap(x)),
+            (map['bannedImports'] as Iterable)
+                .map((x) => BannedImports.fromMap(x)),
           );
     final bannedClassNamesList = map['bannedClassNames'] == null
         ? <BannedClassName>[]
         : List<BannedClassName>.from(
-            (map['bannedClassNames'] as Iterable).map((x) => BannedClassName.fromMap(x)),
+            (map['bannedClassNames'] as Iterable)
+                .map((x) => BannedClassName.fromMap(x)),
           );
 
     final bannedImportsMap = <Layer, Set<Layer>>{};
     for (final bannedConnection in bannedImportsList) {
-      bannedImportsMap[bannedConnection.layer] = bannedConnection.cannotImportFrom.toSet();
+      bannedImportsMap[bannedConnection.layer] =
+          bannedConnection.cannotImportFrom.toSet();
     }
 
     final bannedClassNamesMap = <Layer, Set<RegExp>>{};
     for (final bannedClassName in bannedClassNamesList) {
-      bannedClassNamesMap[bannedClassName.layer] = bannedClassName.bannedClassNames.toSet();
+      bannedClassNamesMap[bannedClassName.layer] =
+          bannedClassName.bannedClassNames.toSet();
     }
 
     return ProjectConfiguration(
