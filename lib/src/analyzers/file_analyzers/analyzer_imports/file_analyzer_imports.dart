@@ -10,12 +10,17 @@ import '../../../configuration/project_configuration.dart';
 
 class FileAnalyzerImports implements FileAnalyzer {
   @override
-  AnalysisError? analyzeFile(
-      ResolvedUnitResult unitResult, ProjectConfiguration config) {
+  Iterable<AnalysisError> analyzeFile(
+    ResolvedUnitResult unitResult,
+    ProjectConfiguration config,
+  ) sync* {
     final path = unitResult.path;
-    final currentLayer = _returnCurrentLayerFromPath(path, config);
+    final currentLayer = _returnCurrentLayerFromPath(
+      path,
+      config,
+    );
 
-    if (currentLayer == null) return null;
+    if (currentLayer == null) return;
 
     final importDirectives =
         unitResult.unit.directives.whereType<ImportDirective>().toList();
@@ -23,16 +28,22 @@ class FileAnalyzerImports implements FileAnalyzer {
     for (final import in importDirectives) {
       final bannedLayers = config.bannedImports[currentLayer];
 
-      if (bannedLayers == null) return null;
+      if (bannedLayers == null) return;
 
       if (import.containsBannedLayer(bannedLayers)) {
-        return unitResult.getBannedLayerLint(import, currentLayer.displayName);
+        yield unitResult.getBannedLayerLint(
+          import,
+          currentLayer.displayName,
+        );
       }
     }
-    return null;
+    return;
   }
 
-  Layer? _returnCurrentLayerFromPath(String path, ProjectConfiguration config) {
+  Layer? _returnCurrentLayerFromPath(
+    String path,
+    ProjectConfiguration config,
+  ) {
     for (final layer in config.layers) {
       final isLayerNameInPath = path.contains(layer.pathRegex);
       if (isLayerNameInPath) return layer;
