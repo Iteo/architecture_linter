@@ -7,19 +7,32 @@ import '../file_analyzers/file_analyzer.dart';
 
 class ArchitectureAnalyzer {
   static List<AnalysisError> runAnalysis(
-      ResolvedUnitResult unit, ProjectConfiguration config) {
-    return generateAnalysisErrors(unit, config).toList();
-  }
+    ResolvedUnitResult unit,
+    ProjectConfiguration config,
+  ) =>
+      generateAnalysisErrors(
+        unit,
+        config,
+      ).toList();
 
   static final List<FileAnalyzer> currentFileAnalyzers = [
     FileAnalyzerImports(),
   ];
 
   static Iterable<AnalysisError> generateAnalysisErrors(
-      ResolvedUnitResult unit, ProjectConfiguration config) sync* {
+    ResolvedUnitResult unit,
+    ProjectConfiguration config,
+  ) sync* {
     for (final fileAnalyzer in currentFileAnalyzers) {
-      final error = fileAnalyzer.analyzeFile(unit, config);
-      if (error != null) yield error;
+      final errors = fileAnalyzer.analyzeFile(
+        unit,
+        config,
+      );
+      if (errors.isNotEmpty) {
+        for (final error in errors) {
+          yield error;
+        }
+      }
     }
   }
 }
