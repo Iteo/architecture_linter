@@ -5,6 +5,7 @@ import 'package:analyzer_plugin/plugin/plugin.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:architecture_linter/src/analyzers/architecture_analyzer/architecture_analyzer.dart';
+import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/file_analyzer_imports.dart';
 
 import '../configuration/configuration_lints.dart';
 import '../configuration/project_configuration.dart';
@@ -57,10 +58,15 @@ class AnalyzerPlugin extends ServerPlugin {
         await analysisContext.currentSession.getResolvedUnit(path);
 
     if (resolvedUnit is ResolvedUnitResult) {
+      final currentFileAnalyzers = [FileAnalyzerImports()];
+      final architectureAnalyzer =
+          ArchitectureAnalyzer(currentFileAnalyzers: currentFileAnalyzers);
+
       channel.sendNotification(
         AnalysisErrorsParams(
           path,
-          ArchitectureAnalyzer.generateAnalysisErrors(resolvedUnit, config)
+          architectureAnalyzer
+              .generateAnalysisErrors(resolvedUnit, config)
               .toList(),
         ).toNotification(),
       );

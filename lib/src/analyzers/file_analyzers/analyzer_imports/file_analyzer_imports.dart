@@ -2,13 +2,15 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/file_analyzer.dart';
+import 'package:architecture_linter/src/configuration/layer.dart';
+import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:architecture_linter/src/extensions/custom_lint_extensions.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/lints.dart';
 
-import '../../../configuration/layer.dart';
-import '../../../configuration/project_configuration.dart';
-
 class FileAnalyzerImports implements FileAnalyzer {
+  @override
+  String get lintCode => "architecture_linter_banned_layer";
+
   @override
   Iterable<AnalysisError> analyzeFile(
     ResolvedUnitResult unitResult,
@@ -34,6 +36,7 @@ class FileAnalyzerImports implements FileAnalyzer {
         yield unitResult.getBannedLayerLint(
           import,
           currentLayer.displayName,
+          lintCode,
         );
       }
     }
