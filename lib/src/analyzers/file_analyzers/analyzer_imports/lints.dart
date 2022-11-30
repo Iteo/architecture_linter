@@ -3,7 +3,11 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 
 extension ImportLints on ResolvedUnitResult {
-  AnalysisError getBannedLayerLint(ImportDirective import, String layerName) {
+  AnalysisError getBannedLayerLint(
+    ImportDirective import,
+    String layerName,
+    String lintCode,
+  ) {
     final charLocation = lineInfo.getLocation(import.offset);
 
     return AnalysisError(
@@ -17,8 +21,8 @@ extension ImportLints on ResolvedUnitResult {
         charLocation.columnNumber,
       ),
       'Layer $layerName '
-          'cannot have ${import.uri}',
-      'architecture_linter_banned_layer',
+      'cannot have ${import.uri}',
+      lintCode,
     );
   }
 }
