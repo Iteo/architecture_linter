@@ -1,4 +1,5 @@
 import 'package:architecture_linter/src/configuration/layer.dart';
+import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
 
 class ImportMocksConfig {
@@ -41,5 +42,6 @@ class ImportMocksConfig {
     [],
     bannedImports,
     {},
+    LintSeverity.warning,
   );
 }

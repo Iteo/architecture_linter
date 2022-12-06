@@ -2,18 +2,21 @@ import '../configuration/layer.dart';
 import '../configuration/banned_class_name.dart';
 import '../configuration/banned_imports.dart';
 import '../configuration/regex.dart';
+import 'lint_severity.dart';
 
 class ProjectConfiguration {
   final List<Layer> layers;
   final List<RegExp> excludePaths;
   final Map<Layer, Set<Layer>> bannedImports;
   final Map<Layer, Set<RegExp>> bannedClassNames;
+  final LintSeverity lintSeverity;
 
   ProjectConfiguration(
     this.layers,
     this.excludePaths,
     this.bannedImports,
     this.bannedClassNames,
+    this.lintSeverity,
   );
 
   factory ProjectConfiguration.fromMap(Map<dynamic, dynamic> map) {
@@ -51,12 +54,14 @@ class ProjectConfiguration {
       bannedClassNamesMap[bannedClassName.layer] =
           bannedClassName.bannedClassNames.toSet();
     }
+    final lintSeverity = lintSeverityFromString(map['lint_severity']);
 
     return ProjectConfiguration(
       layers,
       excludePaths,
       bannedImportsMap,
       bannedClassNamesMap,
+      lintSeverity,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:architecture_linter/src/analyzers/architecture_analyzer/architecture_analyzer.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/file_analyzer_imports.dart';
+import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:test/test.dart';
 
 import '../../helpers/file_parse_helper.dart';
@@ -11,6 +12,7 @@ void main() {
 
   final architectureAnalyzerImports =
       ArchitectureAnalyzer(currentFileAnalyzers: [FileAnalyzerImports()]);
+  final config = ImportMocksConfig.presentationDomainFlutterBannedLayers;
 
   test(
     'Tests if analyzer will return two lints for domain_class.dart',
@@ -21,7 +23,7 @@ void main() {
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
-        ImportMocksConfig.presentationDomainFlutterBannedLayers,
+        config,
       );
       expect(lints.length, 2);
     },
@@ -35,7 +37,7 @@ void main() {
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
-        ImportMocksConfig.presentationDomainFlutterBannedLayers,
+        config,
       );
       expect(lints.length, 1);
     },
@@ -50,9 +52,27 @@ void main() {
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
-        ImportMocksConfig.presentationDomainFlutterBannedLayers,
+        config,
       );
       expect(lints.length, 0);
+    },
+  );
+
+  test(
+    'Tests if analyzer will respect lint_severity config',
+    () async {
+      final domainClassUnit =
+          await FileParseHelper.parseTestFile('${domainPath}domain_class.dart')
+              as ResolvedUnitResult;
+
+      final lints = architectureAnalyzerImports.runAnalysis(
+        domainClassUnit,
+        config,
+      );
+      final firstLintSeverity = lints.first;
+
+      expect(firstLintSeverity.severity,
+          config.lintSeverity.analysisErrorSeverity);
     },
   );
 }
