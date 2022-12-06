@@ -37,6 +37,7 @@ class FileAnalyzerImports implements FileAnalyzer {
           import,
           currentLayer.displayName,
           lintCode,
+          config.lintSeverity,
         );
       }
     }

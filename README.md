@@ -55,6 +55,8 @@ analyzer:
 Add configuration to `analysis_options.yaml` file. You can start with predefined one:
 ```YAML
 architecture_linter:
+  lint_severity: warning
+  
   layers:
     - &infrastructureLayer
       name: "Infrastructure"
@@ -98,4 +100,14 @@ architecture_linter:
       banned:
         - *presentationLayer
         - *infrastructureLayer
+```
+##Configuring lint severity:
+To change lint severity add `lint_severity` entry in `analysis_options.yaml` under `architecture_linter` with one of three values:
+- `info`
+- `warning`
+- `error`
+
+For example: 
+```YAML
+lint_severity: error
 ```
