@@ -2,7 +2,7 @@ name: architecture_linter
 description: Software analytics tool that helps developers analyse and improve project architecture structure.
 homepage: https://github.com/Iteo/architecture_linter
 repository: https://github.com/Iteo/architecture_linter
-version: 0.0.3
+version: 0.0.4
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
