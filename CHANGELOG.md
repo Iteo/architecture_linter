@@ -1,3 +1,6 @@
+## 0.0.4
+- fix: Too low analyzer version
+
 ## 0.0.3
 - fix: Analyzer range version downgrade
 

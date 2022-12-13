@@ -15,7 +15,7 @@ void main() {
   final config = ImportMocksConfig.presentationDomainFlutterBannedLayers;
 
   test(
-    'Tests if analyzer will return two lints for domain_class.dart',
+    'Tests if analyzer will return three lints for domain_class.dart',
     () async {
       final domainClassUnit =
           await FileParseHelper.parseTestFile('${domainPath}domain_class.dart')
@@ -25,7 +25,7 @@ void main() {
         domainClassUnit,
         config,
       );
-      expect(lints.length, 2);
+      expect(lints.length, 3);
     },
   );
 

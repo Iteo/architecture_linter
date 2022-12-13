@@ -29,7 +29,7 @@ add it manually to `pubspec.yaml`
 
 ```yaml
 dev_dependencies:
-  architecture_linter: ^0.0.1
+  architecture_linter: ^0.0.4
 ```
 
 and then run
