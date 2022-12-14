@@ -19,7 +19,7 @@ class AnalyzerPlugin extends ServerPlugin {
   final _configs = <String, ProjectConfiguration>{};
 
   @override
-  List<String> get fileGlobsToAnalyze => const ['*.dart'];
+  List<String> get fileGlobsToAnalyze => const ['**/*.dart'];
 
   @override
   String get name => 'architecture_linter';
@@ -50,14 +50,16 @@ class AnalyzerPlugin extends ServerPlugin {
 
     if (config == null || !isAnalyzed) return;
 
-    if (!config.layers.any((element) => path.contains(element.pathRegex))) {
-      return;
-    }
-
     final resolvedUnit =
         await analysisContext.currentSession.getResolvedUnit(path);
 
     if (resolvedUnit is ResolvedUnitResult) {
+      final unitPath = resolvedUnit.path;
+      final isUnitExcluded = config.isPathExcluded(unitPath);
+      final isPathLayer = config.isPathLayer(unitPath);
+
+      if (isUnitExcluded || !isPathLayer) return;
+
       final currentFileAnalyzers = [FileAnalyzerImports()];
       final architectureAnalyzer =
           ArchitectureAnalyzer(currentFileAnalyzers: currentFileAnalyzers);

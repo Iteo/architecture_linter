@@ -1,19 +1,20 @@
+import 'package:collection/collection.dart';
+import 'package:glob/glob.dart';
 import '../configuration/layer.dart';
 import '../configuration/banned_class_name.dart';
 import '../configuration/banned_imports.dart';
-import '../configuration/regex.dart';
 import 'lint_severity.dart';
 
 class ProjectConfiguration {
   final List<Layer> layers;
-  final List<RegExp> excludePaths;
+  final List<Glob> excludes;
   final Map<Layer, Set<Layer>> bannedImports;
   final Map<Layer, Set<RegExp>> bannedClassNames;
   final LintSeverity lintSeverity;
 
   ProjectConfiguration(
     this.layers,
-    this.excludePaths,
+    this.excludes,
     this.bannedImports,
     this.bannedClassNames,
     this.lintSeverity,
@@ -25,10 +26,10 @@ class ProjectConfiguration {
         : List<Layer>.from(
             (map['layers'] as Iterable).map((x) => Layer.fromMap(x)),
           );
-    final excludePaths = map['excludePaths'] == null
-        ? <RegExp>[]
-        : List<RegExp>.from(
-            ((map['excludePaths'] as Iterable).map((x) => Regex.fromMap(x))),
+    final excludes = map['excludes'] == null
+        ? <Glob>[]
+        : List<Glob>.from(
+            ((map['excludes'] as Iterable).map((source) => Glob(source))),
           );
     final bannedImportsList = map['bannedImports'] == null
         ? <BannedImports>[]
@@ -58,10 +59,56 @@ class ProjectConfiguration {
 
     return ProjectConfiguration(
       layers,
-      excludePaths,
+      excludes,
       bannedImportsMap,
       bannedClassNamesMap,
       lintSeverity,
     );
+  }
+
+  bool isPathExcluded(String path) => _hasMatch(path, excludes);
+
+  bool _hasMatch(String absolutePath, Iterable<Glob> excludes) {
+    final path = absolutePath.replaceAll(r'\', '/');
+
+    return excludes.any((exclude) => exclude.matches(path));
+  }
+
+  bool isPathLayer(String path) =>
+      layers.any((layer) => path.contains(layer.pathRegex));
+
+  @override
+  int get hashCode => Object.hash(
+        lintSeverity,
+        bannedClassNames,
+        layers,
+        excludes,
+        bannedImports,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ProjectConfiguration) return false;
+
+    final isLint = lintSeverity == other.lintSeverity;
+    final isLayers = layers.equals(other.layers);
+    final isExcludes = _isSameGlobs(other.excludes);
+    final isBannedImports =
+        DeepCollectionEquality().equals(bannedImports, other.bannedImports);
+    final isBannedClassNames = DeepCollectionEquality()
+        .equals(bannedClassNames, other.bannedClassNames);
+
+    return isLint &&
+        isLayers &&
+        isExcludes &&
+        isBannedImports &&
+        isBannedClassNames;
+  }
+
+  bool _isSameGlobs(List<Glob> other) {
+    final patternList = excludes.map((e) => e.pattern).toList();
+    final otherPatternList = other.map((e) => e.pattern).toList();
+    return patternList.equals(otherPatternList);
   }
 }

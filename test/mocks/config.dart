@@ -1,9 +1,10 @@
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
+import 'package:glob/glob.dart';
 
-class ImportMocksConfig {
-  const ImportMocksConfig._();
+class ConfigMocks {
+  const ConfigMocks._();
 
   static Layer dataLayer = Layer(
     "Data",
@@ -25,6 +26,10 @@ class ImportMocksConfig {
     domainLayer,
     presentationLayer,
   ];
+  static List<Glob> excludes = [
+    Glob("**.g.dart"),
+    Glob("**/some_folder/**"),
+  ];
 
   static Map<Layer, Set<Layer>> get bannedImports {
     final map = <Layer, Set<Layer>>{};
@@ -36,12 +41,11 @@ class ImportMocksConfig {
     return map;
   }
 
-  static ProjectConfiguration presentationDomainFlutterBannedLayers =
-      ProjectConfiguration(
+  static ProjectConfiguration baseConfigMock = ProjectConfiguration(
     layers,
-    [],
+    excludes,
     bannedImports,
-    {},
+    <Layer, Set<RegExp>>{},
     LintSeverity.warning,
   );
 }
