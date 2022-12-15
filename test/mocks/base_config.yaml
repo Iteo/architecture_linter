@@ -1,0 +1,38 @@
+architecture_linter:
+  lint_severity: warning
+
+  excludes:
+    - "**.g.dart"
+    - "**/some_folder/**"
+
+  layers:
+    - &dataLayer
+      name: "Data"
+      pathRegex:
+        source: "data"
+    - &domainLayer
+      name: "Domain"
+      pathRegex:
+        source: "domain"
+    - &presentationLayer
+      name: "Presentation"
+      pathRegex:
+        source: "presentation"
+
+
+  bannedImports:
+    - layer: *dataLayer
+      banned:
+        - *domainLayer
+        - *presentationLayer
+    - layer: *domainLayer
+      banned:
+        - *dataLayer
+        - *presentationLayer
+    - layer: *presentationLayer
+      banned:
+        - *dataLayer
+        - *domainLayer
+
+
+

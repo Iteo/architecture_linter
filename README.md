@@ -29,7 +29,7 @@ add it manually to `pubspec.yaml`
 
 ```yaml
 dev_dependencies:
-  architecture_linter: ^0.0.4
+  architecture_linter: ^0.0.5
 ```
 
 and then run
@@ -55,6 +55,9 @@ analyzer:
 Add configuration to `analysis_options.yaml` file. You can start with predefined one:
 ```YAML
 architecture_linter:
+  excludes:
+    - "**.g.dart"
+  
   lint_severity: warning
   
   layers:
