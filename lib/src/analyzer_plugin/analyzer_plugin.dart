@@ -19,7 +19,7 @@ class AnalyzerPlugin extends ServerPlugin {
   final _configs = <String, ProjectConfiguration>{};
 
   @override
-  List<String> get fileGlobsToAnalyze => const ['**/*.dart'];
+  List<String> get fileGlobsToAnalyze => const ['*.dart'];
 
   @override
   String get name => 'architecture_linter';

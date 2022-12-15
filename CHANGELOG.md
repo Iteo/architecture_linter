@@ -1,3 +1,6 @@
+## 0.0.5
+- feat: Excludes configuration
+
 ## 0.0.4
 - fix: Too low analyzer version
 
