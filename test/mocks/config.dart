@@ -1,4 +1,5 @@
 import 'package:architecture_linter/src/configuration/layer.dart';
+import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:glob/glob.dart';
@@ -21,10 +22,16 @@ class ConfigMocks {
     RegExp('presentation'),
   );
 
+  static Layer modelLayer = Layer(
+    'model',
+    RegExp("model"),
+  );
+
   static List<Layer> layers = [
     dataLayer,
     domainLayer,
     presentationLayer,
+    modelLayer,
   ];
   static List<Glob> excludes = [
     Glob("**.g.dart"),
@@ -35,11 +42,19 @@ class ConfigMocks {
     final map = <Layer, Set<Layer>>{};
 
     for (final layer in layers) {
-      map[layer] = layers.where((element) => element != layer).toSet();
+      if (layer != modelLayer) {
+        map[layer] = layers
+            .where((element) => element != layer && element != modelLayer)
+            .toSet();
+      }
     }
 
     return map;
   }
+
+  static List<LayerConfig> layersConfig = [
+    LayerConfig(severity: LintSeverity.error, layer: modelLayer)
+  ];
 
   static ProjectConfiguration baseConfigMock = ProjectConfiguration(
     layers,
@@ -47,5 +62,6 @@ class ConfigMocks {
     bannedImports,
     <Layer, Set<RegExp>>{},
     LintSeverity.warning,
+    layersConfig,
   );
 }

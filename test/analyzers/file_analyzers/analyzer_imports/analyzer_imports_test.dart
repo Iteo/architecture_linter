@@ -24,7 +24,7 @@ void main() {
         domainClassUnit,
         config,
       );
-      expect(lints.length, 3);
+      expect(lints.length, 4);
     },
   );
 

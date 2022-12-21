@@ -54,9 +54,10 @@ class AnalyzerPlugin extends ServerPlugin {
         await analysisContext.currentSession.getResolvedUnit(path);
 
     if (resolvedUnit is ResolvedUnitResult) {
-      final unitPath = resolvedUnit.path;
-      final isUnitExcluded = config.isPathExcluded(unitPath);
-      final isPathLayer = config.isPathLayer(unitPath);
+      final unitUri = resolvedUnit.path;
+
+      final isUnitExcluded = config.isPathExcluded(unitUri);
+      final isPathLayer = config.isPathLayer(unitUri);
 
       if (isUnitExcluded || !isPathLayer) return;
 

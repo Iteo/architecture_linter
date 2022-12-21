@@ -1,11 +1,13 @@
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
+import 'package:architecture_linter/src/configuration/lint_severity.dart';
+import 'package:architecture_linter/src/model/architecute_linter_analysis_error.dart';
 
 class ConfigurationLints {
   const ConfigurationLints._();
 
-  static AnalysisError configurationErrorLint(String path) => AnalysisError(
-        AnalysisErrorSeverity.ERROR,
-        AnalysisErrorType.SYNTACTIC_ERROR,
+  static AnalysisError configurationErrorLint(String path) =>
+      ArchitectureLinterAnalysisError.messageWithCode(
+        LintSeverity.error,
         Location(
           path,
           0,
@@ -19,9 +21,9 @@ class ConfigurationLints {
             "Make sure that analysis_option.yaml contains architecture_linter: part",
       );
 
-  static AnalysisError configurationNoLayersLint(String path) => AnalysisError(
-        AnalysisErrorSeverity.WARNING,
-        AnalysisErrorType.SYNTACTIC_ERROR,
+  static AnalysisError configurationNoLayersLint(String path) =>
+      ArchitectureLinterAnalysisError.messageWithCode(
+        LintSeverity.warning,
         Location(
           path,
           0,
@@ -37,9 +39,8 @@ class ConfigurationLints {
       );
 
   static AnalysisError configurationNoBannedImportsLint(String path) =>
-      AnalysisError(
-        AnalysisErrorSeverity.WARNING,
-        AnalysisErrorType.SYNTACTIC_ERROR,
+      ArchitectureLinterAnalysisError.messageWithCode(
+        LintSeverity.warning,
         Location(
           path,
           0,

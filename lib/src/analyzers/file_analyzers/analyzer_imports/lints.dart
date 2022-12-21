@@ -2,6 +2,7 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
+import 'package:architecture_linter/src/model/architecute_linter_analysis_error.dart';
 
 extension ImportLints on ResolvedUnitResult {
   AnalysisError getBannedLayerLint(
@@ -12,9 +13,8 @@ extension ImportLints on ResolvedUnitResult {
   ) {
     final charLocation = lineInfo.getLocation(import.offset);
 
-    return AnalysisError(
-      lintSeverity.analysisErrorSeverity,
-      AnalysisErrorType.LINT,
+    return ArchitectureLinterAnalysisError.messageWithCode(
+      lintSeverity,
       Location(
         path,
         import.offset,

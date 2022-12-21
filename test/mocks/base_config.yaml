@@ -18,6 +18,15 @@ architecture_linter:
       name: "Presentation"
       pathRegex:
         source: "presentation"
+    - &model
+      name: "model"
+      pathRegex:
+        source: "model"
+
+  layers_config:
+    - layer: *model
+      severity: error
+
 
 
   bannedImports:

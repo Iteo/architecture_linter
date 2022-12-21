@@ -1,3 +1,7 @@
+## 0.0.6
+- feat: Lint code in message
+- fix: Other than dart file analyze
+- feat: Severity config for lower level layers
 ## 0.0.5
 - feat: Excludes configuration
 
