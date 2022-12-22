@@ -24,9 +24,6 @@ jobs:
       
       - name: Formatt code
         run: dart format .
-      
-      - name: Check if can be published
-        run: dart pub publish -n
 
   testing:
     needs: analysis
