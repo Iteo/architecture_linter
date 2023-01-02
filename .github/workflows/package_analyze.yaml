@@ -1,0 +1,50 @@
+on:
+  pull_request:
+    branches:
+      - main
+      
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Stable Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "stable"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: dart pub get
+        
+      - name: Analyze project
+        run: dart analyze --fatal-warnings --fatal-infos .
+      
+      - name: Formatt code
+        run: dart format . --set-exit-if-changed
+
+  testing:
+    needs: analysis
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install Stable Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "stable"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Run tests
+        run: dart test 
+      
