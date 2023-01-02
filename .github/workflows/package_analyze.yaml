@@ -23,7 +23,7 @@ jobs:
         run: dart analyze --fatal-warnings --fatal-infos .
       
       - name: Formatt code
-        run: dart format .
+        run: dart format . --set-exit-if-changed
 
   testing:
     needs: analysis
