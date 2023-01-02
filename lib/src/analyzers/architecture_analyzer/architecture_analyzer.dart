@@ -22,6 +22,8 @@ class ArchitectureAnalyzer {
     ResolvedUnitResult unit,
     ProjectConfiguration config,
   ) sync* {
+    if (!_dartRegex.hasMatch(unit.uri.path)) return;
+
     final ignoredCodesForFile = _getIgnoredCodesForFile(unit.content);
 
     for (final fileAnalyzer in currentFileAnalyzers) {
@@ -54,6 +56,7 @@ class ArchitectureAnalyzer {
     r'//\s*ignore\s*:(.+)$',
     multiLine: true,
   );
+  final _dartRegex = RegExp(r'^.*\.dart$');
 
   Iterable<String> _getIgnoredCodesForFile(String source) {
     return _ignoreForFileRegex

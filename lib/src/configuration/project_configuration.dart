@@ -1,3 +1,4 @@
+import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:collection/collection.dart';
 import 'package:glob/glob.dart';
 import '../configuration/layer.dart';
@@ -11,6 +12,7 @@ class ProjectConfiguration {
   final Map<Layer, Set<Layer>> bannedImports;
   final Map<Layer, Set<RegExp>> bannedClassNames;
   final LintSeverity lintSeverity;
+  final List<LayerConfig> layersConfig;
 
   ProjectConfiguration(
     this.layers,
@@ -18,6 +20,7 @@ class ProjectConfiguration {
     this.bannedImports,
     this.bannedClassNames,
     this.lintSeverity,
+    this.layersConfig,
   );
 
   factory ProjectConfiguration.fromMap(Map<dynamic, dynamic> map) {
@@ -56,6 +59,11 @@ class ProjectConfiguration {
           bannedClassName.bannedClassNames.toSet();
     }
     final lintSeverity = lintSeverityFromString(map['lint_severity']);
+    final layersConfig = map['layers_config'] == null
+        ? <LayerConfig>[]
+        : (map['layers_config'] as Iterable)
+            .map((e) => LayerConfig.fromMap(e))
+            .toList();
 
     return ProjectConfiguration(
       layers,
@@ -63,6 +71,7 @@ class ProjectConfiguration {
       bannedImportsMap,
       bannedClassNamesMap,
       lintSeverity,
+      layersConfig,
     );
   }
 
@@ -84,6 +93,7 @@ class ProjectConfiguration {
         layers,
         excludes,
         bannedImports,
+        layersConfig,
       );
 
   @override
@@ -98,12 +108,15 @@ class ProjectConfiguration {
         DeepCollectionEquality().equals(bannedImports, other.bannedImports);
     final isBannedClassNames = DeepCollectionEquality()
         .equals(bannedClassNames, other.bannedClassNames);
+    final isLayersConfig =
+        DeepCollectionEquality().equals(layersConfig, other.layersConfig);
 
     return isLint &&
         isLayers &&
         isExcludes &&
         isBannedImports &&
-        isBannedClassNames;
+        isBannedClassNames &&
+        isLayersConfig;
   }
 
   bool _isSameGlobs(List<Glob> other) {

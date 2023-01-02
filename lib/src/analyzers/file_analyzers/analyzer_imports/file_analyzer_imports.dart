@@ -33,11 +33,14 @@ class FileAnalyzerImports implements FileAnalyzer {
       if (bannedLayers == null) return;
 
       if (import.containsBannedLayer(bannedLayers)) {
+        final layerConfig = import.getConfigFromLastInPath(config.layersConfig);
+        final severity = layerConfig?.severity ?? config.lintSeverity;
+
         yield unitResult.getBannedLayerLint(
           import,
           currentLayer.displayName,
           lintCode,
-          config.lintSeverity,
+          severity,
         );
       }
     }
