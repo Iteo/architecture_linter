@@ -35,8 +35,7 @@ class AnalyzerPlugin extends ServerPlugin {
       _createConfig(context);
     }
 
-    return super
-        .afterNewContextCollection(contextCollection: contextCollection);
+    return super.afterNewContextCollection(contextCollection: contextCollection);
   }
 
   @override
@@ -44,14 +43,29 @@ class AnalyzerPlugin extends ServerPlugin {
     required AnalysisContext analysisContext,
     required String path,
   }) async {
+    final analysisErrors = await analyzeFileForAnalysisErrors(
+      analysisContext: analysisContext,
+      path: path,
+    );
+    channel.sendNotification(
+      AnalysisErrorsParams(
+        path,
+        analysisErrors.toList(),
+      ).toNotification(),
+    );
+  }
+
+  Future<Iterable<AnalysisError>> analyzeFileForAnalysisErrors({
+    required AnalysisContext analysisContext,
+    required String path,
+  }) async {
     final isAnalyzed = analysisContext.contextRoot.isAnalyzed(path);
     final rootPath = analysisContext.contextRoot.root.path;
     final config = _configs[rootPath];
 
-    if (config == null || !isAnalyzed) return;
+    if (config == null || !isAnalyzed) return [];
 
-    final resolvedUnit =
-        await analysisContext.currentSession.getResolvedUnit(path);
+    final resolvedUnit = await analysisContext.currentSession.getResolvedUnit(path);
 
     if (resolvedUnit is ResolvedUnitResult) {
       final unitUri = resolvedUnit.path;
@@ -59,21 +73,13 @@ class AnalyzerPlugin extends ServerPlugin {
       final isUnitExcluded = config.isPathExcluded(unitUri);
       final isPathLayer = config.isPathLayer(unitUri);
 
-      if (isUnitExcluded || !isPathLayer) return;
+      if (isUnitExcluded || !isPathLayer) return [];
 
       final currentFileAnalyzers = [FileAnalyzerImports()];
-      final architectureAnalyzer =
-          ArchitectureAnalyzer(currentFileAnalyzers: currentFileAnalyzers);
-
-      channel.sendNotification(
-        AnalysisErrorsParams(
-          path,
-          architectureAnalyzer
-              .generateAnalysisErrors(resolvedUnit, config)
-              .toList(),
-        ).toNotification(),
-      );
+      final architectureAnalyzer = ArchitectureAnalyzer(currentFileAnalyzers: currentFileAnalyzers);
+      return architectureAnalyzer.generateAnalysisErrors(resolvedUnit, config);
     }
+    return [];
   }
 
   void _createConfig(AnalysisContext analysisContext) {
