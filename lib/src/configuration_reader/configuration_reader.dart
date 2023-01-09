@@ -1,4 +1,5 @@
 import 'package:analyzer/file_system/file_system.dart';
+import 'dart:io' as io;
 
 import '../configuration/project_configuration.dart';
 import 'package:yaml/yaml.dart';
@@ -6,9 +7,27 @@ import 'package:yaml/yaml.dart';
 const _rootKey = "architecture_linter";
 
 class ConfigurationReader {
-  ProjectConfiguration readConfiguration(File optionsFile) {
+  const ConfigurationReader._();
+
+  static ProjectConfiguration readConfiguration(File optionsFile) {
     try {
-      final node = loadYamlNode(optionsFile.readAsStringSync());
+      final fileString = optionsFile.readAsStringSync();
+      final node = loadYamlNode(fileString);
+      final optionNode =
+          node is YamlMap ? yamlMapToDartMap(node) : <String, Object>{};
+
+      final rootConfig = optionNode[_rootKey] as Map<String, dynamic>;
+      return ProjectConfiguration.fromMap(rootConfig);
+    } on YamlException catch (e) {
+      throw FormatException(e.message, e.span);
+    }
+  }
+
+  static Future<ProjectConfiguration> readConfigurationFromPath(
+      String path) async {
+    try {
+      final fileString = await io.File(path).readAsString();
+      final node = loadYamlNode(fileString);
       final optionNode =
           node is YamlMap ? yamlMapToDartMap(node) : <String, Object>{};
 

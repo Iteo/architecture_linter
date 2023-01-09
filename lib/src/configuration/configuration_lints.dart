@@ -6,7 +6,7 @@ class ConfigurationLints {
   const ConfigurationLints._();
 
   static AnalysisError configurationErrorLint(String path) =>
-      ArchitectureLinterAnalysisError.messageWithCode(
+      ArchitectureLinterAnalysisError.message(
         LintSeverity.error,
         Location(
           path,
@@ -22,7 +22,7 @@ class ConfigurationLints {
       );
 
   static AnalysisError configurationNoLayersLint(String path) =>
-      ArchitectureLinterAnalysisError.messageWithCode(
+      ArchitectureLinterAnalysisError.message(
         LintSeverity.warning,
         Location(
           path,
@@ -39,7 +39,7 @@ class ConfigurationLints {
       );
 
   static AnalysisError configurationNoBannedImportsLint(String path) =>
-      ArchitectureLinterAnalysisError.messageWithCode(
+      ArchitectureLinterAnalysisError.message(
         LintSeverity.warning,
         Location(
           path,

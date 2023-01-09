@@ -11,18 +11,19 @@ class ArchitectureLinterAnalysisError extends AnalysisError {
     super.correction,
   });
 
-  factory ArchitectureLinterAnalysisError.messageWithCode(
+  factory ArchitectureLinterAnalysisError.message(
     LintSeverity lintSeverity,
     Location location,
     String message,
     String lintCode, {
     String? correction,
+    bool showCode = true,
   }) {
     return ArchitectureLinterAnalysisError(
       lintSeverity.analysisErrorSeverity,
       AnalysisErrorType.LINT,
       location,
-      '[$lintCode]\n$message',
+      '${showCode ? '[$lintCode]\n' : ''}$message',
       lintCode,
       correction: correction,
     );
