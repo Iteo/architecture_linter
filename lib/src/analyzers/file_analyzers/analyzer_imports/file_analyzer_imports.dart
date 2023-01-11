@@ -8,6 +8,12 @@ import 'package:architecture_linter/src/extensions/custom_lint_extensions.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/lints.dart';
 
 class FileAnalyzerImports implements FileAnalyzer {
+  const FileAnalyzerImports({
+    this.isCli = false,
+  });
+
+  final bool isCli;
+
   @override
   String get lintCode => "architecture_linter_banned_layer";
 
@@ -24,8 +30,7 @@ class FileAnalyzerImports implements FileAnalyzer {
 
     if (currentLayer == null) return;
 
-    final importDirectives =
-        unitResult.unit.directives.whereType<ImportDirective>().toList();
+    final importDirectives = unitResult.unit.directives.whereType<ImportDirective>().toList();
 
     for (final import in importDirectives) {
       final bannedLayers = config.bannedImports[currentLayer];
@@ -41,6 +46,7 @@ class FileAnalyzerImports implements FileAnalyzer {
           currentLayer.displayName,
           lintCode,
           severity,
+          !isCli,
         );
       }
     }

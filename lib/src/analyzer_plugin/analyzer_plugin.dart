@@ -6,10 +6,10 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:architecture_linter/src/analyzers/architecture_analyzer/architecture_analyzer.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/file_analyzer_imports.dart';
+import 'package:architecture_linter/src/utils/analyzer_utils.dart';
 
 import '../configuration/configuration_lints.dart';
 import '../configuration/project_configuration.dart';
-import '../configuration_reader/configuration_reader.dart';
 
 class AnalyzerPlugin extends ServerPlugin {
   AnalyzerPlugin({
@@ -32,7 +32,7 @@ class AnalyzerPlugin extends ServerPlugin {
     required AnalysisContextCollection contextCollection,
   }) async {
     for (final context in contextCollection.contexts) {
-      _createConfig(context);
+      await setConfig(context);
     }
 
     return super.afterNewContextCollection(contextCollection: contextCollection);
@@ -82,25 +82,26 @@ class AnalyzerPlugin extends ServerPlugin {
     return [];
   }
 
-  void _createConfig(AnalysisContext analysisContext) {
+  Future<void> setConfig(AnalysisContext analysisContext) async {
     final rootPath = analysisContext.contextRoot.root.path;
     final optionsFile = analysisContext.contextRoot.optionsFile;
 
-    if (optionsFile != null && optionsFile.exists) {
-      try {
-        final config = ConfigurationReader().readConfiguration(optionsFile);
-        _configs[rootPath] = config;
-        _validateConfig(config, optionsFile.path);
-      } catch (_) {
-        channel.sendNotification(
-          AnalysisErrorsParams(
-            optionsFile.path,
-            [
-              ConfigurationLints.configurationErrorLint(optionsFile.path),
-            ],
-          ).toNotification(),
-        );
-      }
+    try {
+      final config = await createConfig(analysisContext);
+      if (config == null) return;
+      _configs[rootPath] = config;
+
+      /// If config is not null, then so is optionFile
+      _validateConfig(config, optionsFile!.path);
+    } catch (_) {
+      channel.sendNotification(
+        AnalysisErrorsParams(
+          optionsFile?.path ?? '',
+          [
+            ConfigurationLints.configurationErrorLint(optionsFile?.path ?? ''),
+          ],
+        ).toNotification(),
+      );
     }
   }
 

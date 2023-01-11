@@ -31,7 +31,7 @@ abstract class BaseCommand extends Command<void> {
       validateSdkPath();
       validateTargetDirectoriesOrFiles();
     } on InvalidArgumentException catch (e) {
-      usageException(e.message);
+      throw usageException(e.message);
     }
     return runCommand();
   }
@@ -68,5 +68,30 @@ abstract class BaseCommand extends Command<void> {
         throw InvalidArgumentException(exceptionMessage);
       }
     }
+  }
+
+  addCommonFlags() {
+    usesRootFolderOption();
+    usesSdkPathOption();
+  }
+
+  void usesRootFolderOption() {
+    argParser
+      ..addSeparator('')
+      ..addOption(
+        'root-folder',
+        help: 'Root folder.',
+        valueHelp: './',
+        defaultsTo: Directory.current.path,
+      );
+  }
+
+  void usesSdkPathOption() {
+    argParser.addOption(
+      'sdk-path',
+      help:
+          'Dart SDK directory path. Should be provided only when you run the application as compiled executable(https://dart.dev/tools/dart-compile#exe) and automatic Dart SDK path detection fails.',
+      valueHelp: 'directory-path',
+    );
   }
 }
