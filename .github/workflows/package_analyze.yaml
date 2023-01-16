@@ -25,6 +25,9 @@ jobs:
       - name: Formatt code
         run: dart format . --set-exit-if-changed
 
+      - name: Analyze Example
+        run: dart run architecture_linter:analyzer analyze example/lib --set-exit-on-severity-level=none
+
   testing:
     needs: analysis
     runs-on: ubuntu-latest
