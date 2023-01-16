@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:architecture_linter/src/cli/exceptions/invalid_argument_exception.dart';
+import 'package:architecture_linter/src/cli/models/exit_codes.dart';
 import 'package:architecture_linter/src/cli/models/flag_names.dart';
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
@@ -76,7 +77,7 @@ abstract class BaseCommand extends Command<void> {
     }
   }
 
-  addCommonFlags() {
+  void addCommonFlags() {
     usesRootFolderOption();
     usesSdkPathOption();
     usesExitOnSeverityLevel();
@@ -101,7 +102,7 @@ abstract class BaseCommand extends Command<void> {
         allowed: ['error', 'warning', 'info', 'none'],
         valueHelp: 'warning',
         help:
-            'Set exit code 2 if severities same or higher level than selected are detected.',
+            'Set exit code ${ExitCodes.failure} if severities same or higher level than selected are detected.',
       );
   }
 

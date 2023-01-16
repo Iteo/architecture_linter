@@ -159,7 +159,7 @@ For example:
       banned:
         - *domainLayer
 ```
-With this configuration, if `repository` under `domain` folder have been imported to `persentationLayer` the lint would be displayed as `error`. 
+With this configuration, if `repository` under `domain` folder has been imported to `persentationLayer` the lint would be displayed as `error`. 
 
 
 ## CLI:
@@ -179,4 +179,4 @@ You can also configure severity for which analyzer will have `exit code 2`, for 
 $ dart run architecture_linter:analyzer analyze lib --set-exit-on-severity-level=info
 
 ```
-Which where analyzer will exit with `code 2` when `info` or higher level inconsistencies (`error`, `warning`) have been found. 
+Then analyzer will exit with `code 2` when `info` or higher level inconsistencies (`error`, `warning`) have been found. 

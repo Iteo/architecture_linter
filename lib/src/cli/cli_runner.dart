@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:architecture_linter/src/cli/commands/analyze_command.dart';
+import 'package:architecture_linter/src/cli/models/exit_codes.dart';
 import 'package:architecture_linter/src/cli/printer/printer.dart';
 import 'package:args/command_runner.dart';
 
@@ -20,12 +21,12 @@ class CliRunner extends CommandRunner<void> {
         ..write(e.message)
         ..write(e.usage);
 
-      exit(64);
+      exit(ExitCodes.error);
     } catch (e) {
       printer.write('Analyze has exited unexpectedly: "$e"');
 
-      exit(1);
+      exit(ExitCodes.unknownError);
     }
-    exit(0);
+    exit(ExitCodes.success);
   }
 }

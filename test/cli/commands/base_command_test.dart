@@ -23,7 +23,7 @@ void main() {
     );
   });
 
-  test("Tests if  exception is thrown when path doesn't exist", () {
+  test("Tests if exception is thrown when path doesn't exist", () {
     when(() => result.rest).thenReturn(['bil']);
     when(() => result[FlagNames.rootFolder] as String).thenReturn('./');
 

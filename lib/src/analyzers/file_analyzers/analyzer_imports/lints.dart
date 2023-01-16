@@ -9,9 +9,9 @@ extension ImportLints on ResolvedUnitResult {
     ImportDirective import,
     String layerName,
     String lintCode,
-    LintSeverity lintSeverity,
-    bool showCode,
-  ) {
+    LintSeverity lintSeverity, {
+    bool showCode = true,
+  }) {
     final charLocation = lineInfo.getLocation(import.offset);
 
     return ArchitectureLinterAnalysisError.message(

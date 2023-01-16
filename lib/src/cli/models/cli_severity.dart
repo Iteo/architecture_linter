@@ -1,10 +1,13 @@
 import 'package:architecture_linter/src/cli/models/cli_config.dart';
+import 'package:architecture_linter/src/cli/models/exit_codes.dart';
 
 enum CliSeverity {
-  error,
-  warning,
-  info,
-  none;
+  error(2),
+  warning(1),
+  info(0),
+  none(-1);
+
+  const CliSeverity(this.level);
 
   factory CliSeverity.fromString(String severity) {
     final safeString = severity.trim().toLowerCase();
@@ -12,33 +15,20 @@ enum CliSeverity {
     return CliSeverity.values
         .firstWhere((element) => element.toString().contains(safeString));
   }
-}
 
-extension CliSeverityExtension on CliSeverity {
+  final int level;
+
   CliSeverity compareAndReturnSeverity(CliSeverity other) {
     final otherIsHigherLevel = other.level > level;
 
     return otherIsHigherLevel ? other : this;
   }
 
-  int get level {
-    switch (this) {
-      case CliSeverity.error:
-        return 2;
-      case CliSeverity.warning:
-        return 1;
-      case CliSeverity.info:
-        return 0;
-      case CliSeverity.none:
-        return -1;
-    }
-  }
-
   int getExitCode(CliConfig config) {
     if (level >= config.exitOnSeverityLevel.level &&
         config.exitOnSeverityLevel.level >= 0) {
-      return 2;
+      return ExitCodes.failure;
     }
-    return 0;
+    return ExitCodes.success;
   }
 }

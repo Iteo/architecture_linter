@@ -47,7 +47,7 @@ class FileAnalyzerImports implements FileAnalyzer {
           currentLayer.displayName,
           lintCode,
           severity,
-          !isCli,
+          showCode: !isCli,
         );
       }
     }
