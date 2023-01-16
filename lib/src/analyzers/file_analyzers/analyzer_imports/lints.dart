@@ -9,11 +9,12 @@ extension ImportLints on ResolvedUnitResult {
     ImportDirective import,
     String layerName,
     String lintCode,
-    LintSeverity lintSeverity,
-  ) {
+    LintSeverity lintSeverity, {
+    bool showCode = true,
+  }) {
     final charLocation = lineInfo.getLocation(import.offset);
 
-    return ArchitectureLinterAnalysisError.messageWithCode(
+    return ArchitectureLinterAnalysisError.message(
       lintSeverity,
       Location(
         path,
@@ -25,6 +26,7 @@ extension ImportLints on ResolvedUnitResult {
       'Layer $layerName '
       'cannot have ${import.uri}',
       lintCode,
+      showCode: showCode,
     );
   }
 }

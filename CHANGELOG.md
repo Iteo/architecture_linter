@@ -1,3 +1,7 @@
+## 0.0.7
+- feat: CLI
+- feat: Example
+
 ## 0.0.6
 - feat: Lint code in message
 - fix: Other than dart file analyze
@@ -6,7 +10,7 @@
 - feat: Excludes configuration
 
 ## 0.0.4
-- fix: Too low analyzer version
+- fix: Analyzer version
 
 ## 0.0.3
 - fix: Analyzer range version downgrade

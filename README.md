@@ -31,7 +31,7 @@ add it manually to `pubspec.yaml`
 
 ```yaml
 dev_dependencies:
-  architecture_linter: ^0.0.5
+  architecture_linter: ^0.0.7
 ```
 
 and then run
@@ -159,4 +159,24 @@ For example:
       banned:
         - *domainLayer
 ```
-With this configuration, if `repository` under `domain` folder have been imported to `persentationLayer` the lint would be displayed as `error`. 
+With this configuration, if `repository` under `domain` folder has been imported to `persentationLayer` the lint would be displayed as `error`. 
+
+
+## CLI:
+
+Package also supports CLI, run it with: 
+
+```sh
+$ dart run architecture_linter:analyzer analyze lib 
+
+# or for a Flutter package
+$ flutter pub run architecture_linter:analyzer analyze lib
+```
+You can also configure severity for which analyzer will have `exit code 2`, for example:
+
+```sh
+# Defaults to warning 
+$ dart run architecture_linter:analyzer analyze lib --set-exit-on-severity-level=info
+
+```
+Then analyzer will exit with `code 2` when `info` or higher level inconsistencies (`error`, `warning`) have been found. 
