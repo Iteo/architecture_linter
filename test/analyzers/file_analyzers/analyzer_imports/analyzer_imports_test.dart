@@ -74,4 +74,24 @@ void main() {
           config.lintSeverity.analysisErrorSeverity);
     },
   );
+
+  test(
+    'Tests if analyzer will respect banned layer severity config',
+    () async {
+      final domainClassUnit =
+          await FileParseHelper.parseTestFile('${domainPath}domain_class.dart')
+              as ResolvedUnitResult;
+
+      final lints = architectureAnalyzerImports.runAnalysis(
+        domainClassUnit,
+        config,
+      );
+      final firstLintSeverity = lints.first;
+
+      expect(
+        firstLintSeverity.severity,
+        config.bannedImportSeverities.entries.first.value.analysisErrorSeverity,
+      );
+    },
+  );
 }

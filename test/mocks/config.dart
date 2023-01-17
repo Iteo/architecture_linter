@@ -52,6 +52,10 @@ class ConfigMocks {
     return map;
   }
 
+  static Map<Layer, LintSeverity> bannedImportsSeverities = {
+    domainLayer: LintSeverity.info
+  };
+
   static List<LayerConfig> layersConfig = [
     LayerConfig(severity: LintSeverity.error, layer: modelLayer)
   ];
@@ -60,7 +64,7 @@ class ConfigMocks {
     layers,
     excludes,
     bannedImports,
-    <Layer, LintSeverity>{},
+    bannedImportsSeverities,
     <Layer, Set<RegExp>>{},
     LintSeverity.warning,
     layersConfig,
