@@ -8,7 +8,7 @@ extension ImportDirectiveExtension on ImportDirective {
   bool containsBannedLayer(Set<Layer> bannedLayers) {
     for (final banned in bannedLayers) {
       if (uri.stringValue != null &&
-          banned.pathRegex.hasMatch(uri.stringValue!)) {
+          RegExp(banned.path).hasMatch(uri.stringValue!)) {
         return true;
       }
     }
@@ -20,9 +20,9 @@ extension ImportDirectiveExtension on ImportDirective {
 
     for (final config in configs) {
       final gotConfigForPath = uri.stringValue != null &&
-          config.layer.pathRegex.hasMatch(uri.stringValue!);
+          RegExp(config.layer.path).hasMatch(uri.stringValue!);
       if (gotConfigForPath) {
-        final index = uri.stringValue!.indexOf(config.layer.pathRegex);
+        final index = uri.stringValue!.indexOf(config.layer.path);
         configMap[index] = config;
       }
     }

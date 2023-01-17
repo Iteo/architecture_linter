@@ -64,7 +64,7 @@ class FileAnalyzerImports implements FileAnalyzer {
     ProjectConfiguration config,
   ) {
     for (final layer in config.layers) {
-      final isLayerNameInPath = path.contains(layer.pathRegex);
+      final isLayerNameInPath = path.contains(RegExp(layer.path));
       if (isLayerNameInPath) return layer;
     }
     return null;

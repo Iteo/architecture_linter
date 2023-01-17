@@ -8,24 +8,19 @@ architecture_linter:
   layers:
     - &dataLayer
       name: "Data"
-      pathRegex:
-        source: "data"
+      path: "data"
     - &domainLayer
       name: "Domain"
-      pathRegex:
-        source: "domain"
+      path: "domain"
     - &presentationLayer
       name: "Presentation"
-      pathRegex:
-        source: "presentation"
+      path: "presentation"
     - &model
       name: "model"
-      pathRegex:
-        source: "model"
+      path: "model"
     - &infrastructureLayer
       name: "Infrastructure"
-      pathRegex:
-        source: "infrastructure"
+      path: "infrastructure"
 
   layers_config:
     - layer: *model

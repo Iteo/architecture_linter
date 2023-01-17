@@ -6,7 +6,7 @@ extension LayerExtension on Map<Layer, Set<Layer>> {
   Pair<Layer, Set<Layer>>? getLayerForPath(String currentPath) {
     try {
       final foundLayer =
-          keys.firstWhere((layer) => layer.pathRegex.hasMatch(currentPath));
+          keys.firstWhere((layer) => RegExp(layer.path).hasMatch(currentPath));
       return Pair(foundLayer, this[foundLayer] ?? {});
     } catch (_) {
       return null;

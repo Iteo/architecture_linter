@@ -1,3 +1,4 @@
+// TODO Delete or refactor usage in project
 class Regex {
   static RegExp fromMap(Map<dynamic, dynamic> map) {
     return RegExp(
