@@ -8,23 +8,28 @@ class ConfigMocks {
   const ConfigMocks._();
 
   static Layer dataLayer = Layer(
-    "Data",
+    'Data',
     RegExp('data'),
   );
 
   static Layer domainLayer = Layer(
-    "Domain",
+    'Domain',
     RegExp('domain'),
   );
 
   static Layer presentationLayer = Layer(
-    "Presentation",
+    'Presentation',
     RegExp('presentation'),
   );
 
   static Layer modelLayer = Layer(
     'model',
-    RegExp("model"),
+    RegExp('model'),
+  );
+
+  static Layer infrastructureLayer = Layer(
+    'Infrastructure',
+    RegExp('infrastructure'),
   );
 
   static List<Layer> layers = [
@@ -32,6 +37,7 @@ class ConfigMocks {
     domainLayer,
     presentationLayer,
     modelLayer,
+    infrastructureLayer
   ];
   static List<Glob> excludes = [
     Glob("**.g.dart"),
@@ -53,11 +59,12 @@ class ConfigMocks {
   }
 
   static Map<Layer, LintSeverity> bannedImportsSeverities = {
-    domainLayer: LintSeverity.info
+    infrastructureLayer: LintSeverity.info
   };
 
   static List<LayerConfig> layersConfig = [
-    LayerConfig(severity: LintSeverity.error, layer: modelLayer)
+    LayerConfig(severity: LintSeverity.error, layer: modelLayer),
+    LayerConfig(severity: LintSeverity.error, layer: infrastructureLayer)
   ];
 
   static ProjectConfiguration baseConfigMock = ProjectConfiguration(

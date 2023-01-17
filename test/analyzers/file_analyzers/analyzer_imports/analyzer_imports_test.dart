@@ -8,6 +8,7 @@ import '../../../mocks/config.dart';
 
 void main() {
   final domainPath = '/domain/';
+  final infrastructurePath = '/infrastructure/';
 
   final architectureAnalyzerImports =
       ArchitectureAnalyzerMocks.baseArchitectureAnalyzer;
@@ -79,7 +80,7 @@ void main() {
     'Tests if analyzer will respect banned layer severity config',
     () async {
       final domainClassUnit =
-          await FileParseHelper.parseTestFile('${domainPath}domain_class.dart')
+          await FileParseHelper.parseTestFile('${infrastructurePath}infrastructure_class.dart')
               as ResolvedUnitResult;
 
       final lints = architectureAnalyzerImports.runAnalysis(
