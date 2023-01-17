@@ -109,6 +109,8 @@ architecture_linter:
         - *useCaseLayer
         - *presentationLayer
     - layer: *useCaseLayer
+      # You can also specify severity per layer
+      severity: info
       banned:
         - *presentationLayer
         - *infrastructureLayer
