@@ -109,8 +109,6 @@ architecture_linter:
         - *useCaseLayer
         - *presentationLayer
     - layer: *useCaseLayer
-      # You can also specify severity per layer
-      severity: info
       banned:
         - *presentationLayer
         - *infrastructureLayer
@@ -118,7 +116,7 @@ architecture_linter:
 
 ## Configuring lint severity:
 
-To change lint severity for whole plugn add `lint_severity` entry in `analysis_options.yaml` under `architecture_linter`
+To change lint severity for whole plugin add `lint_severity` entry in `analysis_options.yaml` under `architecture_linter`
 with one of three values:
 
 - `info`
@@ -155,14 +153,24 @@ For example:
   layers_config:
     - layer: *repository
       severity: error
+    - layer: *infrastructureLayer
+      severity: error
   
   bannedImports:
     - layer: *presentationLayer
       banned:
         - *domainLayer
+    - layer: *infrastructureLayer
+      # You can also specify severity per layer
+      severity: info
+      banned:
+        - *domainLayer
 ```
-With this configuration, if `repository` under `domain` folder has been imported to `persentationLayer` the lint would be displayed as `error`. 
+With this configuration, if `repository` under `domain` folder has been imported to `presentationLayer`
+the lint would be displayed as `error`.
 
+An import of any file from `domain` to `infrastructureLayer` will result in lint alert of
+severity `info` despite of `layers_config` setting.
 
 ## CLI:
 

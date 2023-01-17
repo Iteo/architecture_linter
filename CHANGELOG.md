@@ -1,3 +1,6 @@
+## 0.0.8
+- feat: Banned layers config severity
+
 ## 0.0.7
 - feat: CLI
 - feat: Example
@@ -17,7 +20,7 @@
 
 ## 0.0.2
 - fix: One lint per file
-- feat: Add possibility to `configurate lint severity`
+- feat: Add possibility to `configure lint severity`
 - feat: Add support for `ignore` and `ignore_for_file`
 
 ## 0.0.1
