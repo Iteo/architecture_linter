@@ -47,8 +47,8 @@ void main() {
     'Tests if analyzer will respect // ignore_for_file and return 0 lints',
     () async {
       final domainClassUnit = await FileParseHelper.parseTestFile(
-              '${domainPath}domain_class_ignore_for_file.dart')
-          as ResolvedUnitResult;
+        '${domainPath}domain_class_ignore_for_file.dart',
+      ) as ResolvedUnitResult;
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
@@ -79,9 +79,9 @@ void main() {
   test(
     'Tests if analyzer will respect banned layer severity config',
     () async {
-      final domainClassUnit =
-          await FileParseHelper.parseTestFile('${infrastructurePath}infrastructure_class.dart')
-              as ResolvedUnitResult;
+      final domainClassUnit = await FileParseHelper.parseTestFile(
+              '${infrastructurePath}infrastructure_class.dart')
+          as ResolvedUnitResult;
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
