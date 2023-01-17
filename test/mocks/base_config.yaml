@@ -22,26 +22,36 @@ architecture_linter:
       name: "model"
       pathRegex:
         source: "model"
+    - &infrastructureLayer
+      name: "Infrastructure"
+      pathRegex:
+        source: "infrastructure"
 
   layers_config:
     - layer: *model
       severity: error
-
-
+    - layer: *infrastructureLayer
+      severity: error
 
   bannedImports:
     - layer: *dataLayer
       banned:
         - *domainLayer
         - *presentationLayer
+        - *infrastructureLayer
     - layer: *domainLayer
       banned:
         - *dataLayer
         - *presentationLayer
+        - *infrastructureLayer
     - layer: *presentationLayer
       banned:
         - *dataLayer
         - *domainLayer
-
-
-
+        - *infrastructureLayer
+    - layer: *infrastructureLayer
+      severity: info
+      banned:
+        - *dataLayer
+        - *domainLayer
+        - *presentationLayer

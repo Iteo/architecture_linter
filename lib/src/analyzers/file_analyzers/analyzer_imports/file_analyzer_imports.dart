@@ -3,6 +3,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/file_analyzer.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
+import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:architecture_linter/src/extensions/custom_lint_extensions.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/lints.dart';
@@ -40,7 +41,11 @@ class FileAnalyzerImports implements FileAnalyzer {
 
       if (import.containsBannedLayer(bannedLayers)) {
         final layerConfig = import.getConfigFromLastInPath(config.layersConfig);
-        final severity = layerConfig?.severity ?? config.lintSeverity;
+        final severity = _getNearestSeverity(
+          layerConfig?.severity,
+          config.lintSeverity,
+          config.bannedImportSeverities[currentLayer],
+        );
 
         yield unitResult.getBannedLayerLint(
           import,
@@ -63,5 +68,17 @@ class FileAnalyzerImports implements FileAnalyzer {
       if (isLayerNameInPath) return layer;
     }
     return null;
+  }
+
+  LintSeverity _getNearestSeverity(
+    LintSeverity? layerConfigSeverity,
+    LintSeverity configLintSeverity,
+    LintSeverity? bannedImportSeverity,
+  ) {
+    if (bannedImportSeverity != null) {
+      return bannedImportSeverity;
+    }
+
+    return layerConfigSeverity ?? configLintSeverity;
   }
 }

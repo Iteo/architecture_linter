@@ -10,6 +10,7 @@ class ProjectConfiguration {
   final List<Layer> layers;
   final List<Glob> excludes;
   final Map<Layer, Set<Layer>> bannedImports;
+  final Map<Layer, LintSeverity> bannedImportSeverities;
   final Map<Layer, Set<RegExp>> bannedClassNames;
   final LintSeverity lintSeverity;
   final List<LayerConfig> layersConfig;
@@ -18,6 +19,7 @@ class ProjectConfiguration {
     this.layers,
     this.excludes,
     this.bannedImports,
+    this.bannedImportSeverities,
     this.bannedClassNames,
     this.lintSeverity,
     this.layersConfig,
@@ -48,9 +50,14 @@ class ProjectConfiguration {
           );
 
     final bannedImportsMap = <Layer, Set<Layer>>{};
+    final bannedImportsSeverityMap = <Layer, LintSeverity>{};
     for (final bannedConnection in bannedImportsList) {
       bannedImportsMap[bannedConnection.layer] =
           bannedConnection.cannotImportFrom.toSet();
+      if (bannedConnection.severity != null) {
+        bannedImportsSeverityMap[bannedConnection.layer] =
+            bannedConnection.severity!;
+      }
     }
 
     final bannedClassNamesMap = <Layer, Set<RegExp>>{};
@@ -69,6 +76,7 @@ class ProjectConfiguration {
       layers,
       excludes,
       bannedImportsMap,
+      bannedImportsSeverityMap,
       bannedClassNamesMap,
       lintSeverity,
       layersConfig,
