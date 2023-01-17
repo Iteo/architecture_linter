@@ -60,6 +60,7 @@ class ConfigMocks {
     layers,
     excludes,
     bannedImports,
+    <Layer, LintSeverity>{},
     <Layer, Set<RegExp>>{},
     LintSeverity.warning,
     layersConfig,
