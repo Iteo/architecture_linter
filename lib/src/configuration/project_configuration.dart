@@ -2,7 +2,6 @@ import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:collection/collection.dart';
 import 'package:glob/glob.dart';
 import '../configuration/layer.dart';
-import '../configuration/banned_class_name.dart';
 import '../configuration/banned_imports.dart';
 import 'lint_severity.dart';
 
@@ -11,7 +10,6 @@ class ProjectConfiguration {
   final List<Glob> excludes;
   final Map<Layer, Set<Layer>> bannedImports;
   final Map<Layer, LintSeverity> bannedImportSeverities;
-  final Map<Layer, Set<RegExp>> bannedClassNames;
   final LintSeverity lintSeverity;
   final List<LayerConfig> layersConfig;
 
@@ -20,7 +18,6 @@ class ProjectConfiguration {
     this.excludes,
     this.bannedImports,
     this.bannedImportSeverities,
-    this.bannedClassNames,
     this.lintSeverity,
     this.layersConfig,
   );
@@ -42,12 +39,6 @@ class ProjectConfiguration {
             (map['bannedImports'] as Iterable)
                 .map((x) => BannedImports.fromMap(x)),
           );
-    final bannedClassNamesList = map['bannedClassNames'] == null
-        ? <BannedClassName>[]
-        : List<BannedClassName>.from(
-            (map['bannedClassNames'] as Iterable)
-                .map((x) => BannedClassName.fromMap(x)),
-          );
 
     final bannedImportsMap = <Layer, Set<Layer>>{};
     final bannedImportsSeverityMap = <Layer, LintSeverity>{};
@@ -60,11 +51,6 @@ class ProjectConfiguration {
       }
     }
 
-    final bannedClassNamesMap = <Layer, Set<RegExp>>{};
-    for (final bannedClassName in bannedClassNamesList) {
-      bannedClassNamesMap[bannedClassName.layer] =
-          bannedClassName.bannedClassNames.toSet();
-    }
     final lintSeverity = lintSeverityFromString(map['lint_severity']);
     final layersConfig = map['layers_config'] == null
         ? <LayerConfig>[]
@@ -77,7 +63,6 @@ class ProjectConfiguration {
       excludes,
       bannedImportsMap,
       bannedImportsSeverityMap,
-      bannedClassNamesMap,
       lintSeverity,
       layersConfig,
     );
@@ -97,7 +82,6 @@ class ProjectConfiguration {
   @override
   int get hashCode => Object.hash(
         lintSeverity,
-        bannedClassNames,
         layers,
         excludes,
         bannedImports,
@@ -114,8 +98,6 @@ class ProjectConfiguration {
     final isExcludes = _isSameGlobs(other.excludes);
     final isBannedImports =
         DeepCollectionEquality().equals(bannedImports, other.bannedImports);
-    final isBannedClassNames = DeepCollectionEquality()
-        .equals(bannedClassNames, other.bannedClassNames);
     final isLayersConfig =
         DeepCollectionEquality().equals(layersConfig, other.layersConfig);
 
@@ -123,7 +105,6 @@ class ProjectConfiguration {
         isLayers &&
         isExcludes &&
         isBannedImports &&
-        isBannedClassNames &&
         isLayersConfig;
   }
 
