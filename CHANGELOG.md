@@ -2,8 +2,6 @@
 - fix: Removed unhandled banned class names
 - feat: Simplified regex object definition in config
 
-Breaking: Banned layer definition changed from `pathRegex: source: "..."` to direct `path: "..."`
-
 ## 0.0.8
 - feat: Banned layers config severity
 
