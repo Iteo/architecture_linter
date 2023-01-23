@@ -1,18 +1,16 @@
-import 'regex.dart';
-
 class Layer {
   final String displayName;
-  final RegExp pathRegex;
+  final String path;
 
   Layer(
     this.displayName,
-    this.pathRegex,
+    this.path,
   );
 
   factory Layer.fromMap(Map<dynamic, dynamic> map) {
     return Layer(
       map['name'],
-      Regex.fromMap(map['pathRegex']),
+      map['path'],
     );
   }
 
@@ -22,9 +20,9 @@ class Layer {
 
     return other is Layer &&
         other.displayName == displayName &&
-        other.pathRegex == pathRegex;
+        other.path == path;
   }
 
   @override
-  int get hashCode => displayName.hashCode ^ pathRegex.hashCode;
+  int get hashCode => displayName.hashCode ^ path.hashCode;
 }

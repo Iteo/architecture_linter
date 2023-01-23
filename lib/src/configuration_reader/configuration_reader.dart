@@ -24,7 +24,8 @@ class ConfigurationReader {
   }
 
   static Future<ProjectConfiguration> readConfigurationFromPath(
-      String path) async {
+    String path,
+  ) async {
     try {
       final fileString = await io.File(path).readAsString();
       final node = loadYamlNode(fileString);

@@ -9,27 +9,27 @@ class ConfigMocks {
 
   static Layer dataLayer = Layer(
     'Data',
-    RegExp('data'),
+    'data',
   );
 
   static Layer domainLayer = Layer(
     'Domain',
-    RegExp('domain'),
+    'domain',
   );
 
   static Layer presentationLayer = Layer(
     'Presentation',
-    RegExp('presentation'),
+    'presentation',
   );
 
   static Layer modelLayer = Layer(
     'model',
-    RegExp('model'),
+    'model',
   );
 
   static Layer infrastructureLayer = Layer(
     'Infrastructure',
-    RegExp('infrastructure'),
+    'infrastructure',
   );
 
   static List<Layer> layers = [
@@ -72,7 +72,6 @@ class ConfigMocks {
     excludes,
     bannedImports,
     bannedImportsSeverities,
-    <Layer, Set<RegExp>>{},
     LintSeverity.warning,
     layersConfig,
   );

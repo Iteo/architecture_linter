@@ -35,8 +35,9 @@ class AnalyzerPlugin extends ServerPlugin {
       await setConfig(context);
     }
 
-    return super
-        .afterNewContextCollection(contextCollection: contextCollection);
+    return super.afterNewContextCollection(
+      contextCollection: contextCollection,
+    );
   }
 
   @override

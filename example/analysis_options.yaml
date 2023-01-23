@@ -22,20 +22,16 @@ architecture_linter:
   layers:
     - &infrastructureLayer
       name: "Infrastructure"
-      pathRegex:
-        source: "(infrastructure)"
+      path: "(infrastructure)"
     - &domainLayer
       name: "Domain"
-      pathRegex:
-        source: "(domain)"
+      path: "(domain)"
     - &presentationLayer
       name: "Presentation"
-      pathRegex:
-        source: "(presentation)"
+      path: "(presentation)"
     - &repository
       name: "repository"
-      pathRegex:
-        source: "(repository)"
+      path: "(repository)"
 
   layers_config:
     - layer: *repository

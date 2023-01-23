@@ -68,28 +68,22 @@ architecture_linter:
   layers:
     - &infrastructureLayer
       name: "Infrastructure"
-      pathRegex:
-        source: "(infrastructure)"
+      path: "(infrastructure)"
     - &domainLayer
       name: "Domain"
-      pathRegex:
-        source: "(domain)"
+      path: "(domain)"
     - &presentationLayer
       name: "Presentation"
-      pathRegex:
-        source: "(presentation)"
+      path: "(presentation)"
     - &useCaseLayer
       name: "Domain/UseCases"
-      pathRegex:
-        source: "(domain/use_cases)"
+      path: "(domain/use_cases)"
     - &utils
       name: "Utils"
-      pathRegex:
-        source: "(utils)"
+      path: "(utils)"
     - &repository
       name: "repository"
-      pathRegex:
-        source: "(repository)"
+      path: "(repository)"
 
   layers_config:
     - layer: *repository
@@ -139,16 +133,13 @@ For example:
   layers:
     - &domainLayer
       name: "Domain"
-      pathRegex:
-        source: "(domain)"
+      path: "(domain)"
     - &presentationLayer
       name: "Presentation"
-      pathRegex:
-        source: "(presentation)"
+      path: "(presentation)"
     - &repository
       name: "repository"
-      pathRegex:
-        source: "(repository)"
+      path: "(repository)"
 
   layers_config:
     - layer: *repository
