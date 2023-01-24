@@ -37,7 +37,7 @@ architecture_linter:
     - layer: *repository
       severity: info
 
-  bannedImports:
+  banned_imports:
     - layer: *domainLayer
       banned:
         - *presentationLayer

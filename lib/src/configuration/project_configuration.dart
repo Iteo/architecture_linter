@@ -5,6 +5,12 @@ import '../configuration/layer.dart';
 import '../configuration/banned_imports.dart';
 import 'lint_severity.dart';
 
+const keyLayers = 'layers';
+const keyExcludes = 'excludes';
+const keyBannedImports = 'banned_imports';
+const keyLayersConfig = 'layers_config';
+const keyLintSeverity = 'lint_severity';
+
 class ProjectConfiguration {
   final List<Layer> layers;
   final List<Glob> excludes;
@@ -23,20 +29,20 @@ class ProjectConfiguration {
   );
 
   factory ProjectConfiguration.fromMap(Map<dynamic, dynamic> map) {
-    final layers = map['layers'] == null
+    final layers = map[keyLayers] == null
         ? <Layer>[]
         : List<Layer>.from(
-            (map['layers'] as Iterable).map((x) => Layer.fromMap(x)),
+            (map[keyLayers] as Iterable).map((x) => Layer.fromMap(x)),
           );
-    final excludes = map['excludes'] == null
+    final excludes = map[keyExcludes] == null
         ? <Glob>[]
         : List<Glob>.from(
-            ((map['excludes'] as Iterable).map((source) => Glob(source))),
+            ((map[keyExcludes] as Iterable).map((source) => Glob(source))),
           );
-    final bannedImportsList = map['bannedImports'] == null
+    final bannedImportsList = map[keyBannedImports] == null
         ? <BannedImports>[]
         : List<BannedImports>.from(
-            (map['bannedImports'] as Iterable)
+            (map[keyBannedImports] as Iterable)
                 .map((x) => BannedImports.fromMap(x)),
           );
 
@@ -51,10 +57,10 @@ class ProjectConfiguration {
       }
     }
 
-    final lintSeverity = lintSeverityFromString(map['lint_severity']);
-    final layersConfig = map['layers_config'] == null
+    final lintSeverity = lintSeverityFromString(map[keyLintSeverity]);
+    final layersConfig = map[keyLayersConfig] == null
         ? <LayerConfig>[]
-        : (map['layers_config'] as Iterable)
+        : (map[keyLayersConfig] as Iterable)
             .map((e) => LayerConfig.fromMap(e))
             .toList();
 
