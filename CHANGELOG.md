@@ -1,3 +1,6 @@
+## 0.0.10
+- feat: Unified keyword case
+
 ## 0.0.9
 - fix: Removed unhandled banned class names
 - feat: Simplified regex object definition in config
