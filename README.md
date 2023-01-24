@@ -89,7 +89,7 @@ architecture_linter:
     - layer: *repository
       severity: error
 
-  bannedImports:
+  banned_imports:
     - layer: *domainLayer
       banned:
         - *presentationLayer
@@ -147,7 +147,7 @@ For example:
     - layer: *infrastructureLayer
       severity: error
   
-  bannedImports:
+  banned_imports:
     - layer: *presentationLayer
       banned:
         - *domainLayer

@@ -28,7 +28,7 @@ architecture_linter:
     - layer: *infrastructureLayer
       severity: error
 
-  bannedImports:
+  banned_imports:
     - layer: *dataLayer
       banned:
         - *domainLayer

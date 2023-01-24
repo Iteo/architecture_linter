@@ -51,7 +51,7 @@ class ConfigurationLints {
         'Configuration file does not have banned imports declared',
         'architecture_linter_banned_imports_not_found',
         correction: "Make sure that the architecture config contains"
-            " section `bannedImports:` with at least one entry. Check README "
+            " section `banned_imports:` with at least one entry. Check README "
             "for more information how to declare proper config. structure.",
       );
 }
