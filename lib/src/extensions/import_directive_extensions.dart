@@ -23,6 +23,7 @@ extension ImportDirectiveExtension on ImportDirective {
 
     for (final config in configs) {
       final gotConfigForPath = uri.stringValue != null &&
+          config.layer.path.isNotEmpty &&
           RegExp(config.layer.path).hasMatch(uri.stringValue!);
       if (gotConfigForPath) {
         final index = uri.stringValue!.indexOf(config.layer.path);
