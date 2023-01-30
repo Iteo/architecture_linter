@@ -1,7 +1,4 @@
-import 'package:_fe_analyzer_shared/src/base/syntactic_entity.dart';
-import 'package:_fe_analyzer_shared/src/scanner/token.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
@@ -128,6 +125,67 @@ void main() {
       expect(result, null);
     });
 
-    // TODO Finish last tests
+    test('Test if returns null for import path that is not banned', () {
+      final infrastructureConfig = <LayerConfig>[
+        LayerConfig(
+          severity: LintSeverity.info,
+          layer: Layer('Infra', 'infrastructure'),
+        ),
+      ];
+      final importDirective = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('domain');
+      when(() => importDirective.uri).thenReturn(testUri);
+
+      final result = importDirective.getConfigFromLastInPath(
+        infrastructureConfig,
+      );
+
+      expect(result, null);
+    });
+
+    test('Test if returns a config for a single layer', () {
+      final domainConfig = <LayerConfig>[
+        LayerConfig(
+          severity: LintSeverity.info,
+          layer: Layer('Domain', 'domain'),
+        ),
+      ];
+      final importDirective = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('domain');
+      when(() => importDirective.uri).thenReturn(testUri);
+
+      final result = importDirective.getConfigFromLastInPath(domainConfig);
+
+      expect(result, TypeMatcher<LayerConfig>());
+    });
+
+    test('Test if returns a config for the last one in path', () {
+      final domainConfig = <LayerConfig>[
+        LayerConfig(
+          severity: LintSeverity.info,
+          layer: Layer('Domain', '(domain)'),
+        ),
+        LayerConfig(
+          severity: LintSeverity.info,
+          layer: Layer('Use Case', '(use_case)'),
+        ),
+      ];
+      final importDirective = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('/domain/use_case/feature/');
+      when(() => importDirective.uri).thenReturn(testUri);
+
+      final result = importDirective.getConfigFromLastInPath(domainConfig);
+
+      expect(
+        result,
+        LayerConfig(
+          severity: LintSeverity.info,
+          layer: Layer('Use Case', '(use_case)'),
+        ),
+      );
+    });
   });
 }
