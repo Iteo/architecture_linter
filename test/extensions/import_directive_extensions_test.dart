@@ -16,67 +16,67 @@ void main() {
   group('containsBannedLayer', () {
     test('Test if returns false for empty set parameter', () {
       final emptySet = <Layer>{};
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
 
-      final result = importDirective.containsBannedLayer(emptySet);
+      final result = testImport.containsBannedLayer(emptySet);
 
       expect(result, false);
     });
 
     test('Test if returns false for layer with empty path', () {
       final emptySet = <Layer>{};
-      final importDirective = TestImportDirective();
-      when(() => importDirective.uri.stringValue).thenReturn('');
+      final testImport = TestImportDirective();
+      when(() => testImport.uri.stringValue).thenReturn('');
 
-      final result = importDirective.containsBannedLayer(emptySet);
+      final result = testImport.containsBannedLayer(emptySet);
 
       expect(result, false);
     });
 
     test('Test if returns false for null import', () {
       final infrastructureLayer = <Layer>{Layer('', '')};
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn(null);
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.containsBannedLayer(infrastructureLayer);
+      final result = testImport.containsBannedLayer(infrastructureLayer);
 
       expect(result, false);
     });
 
     test('Test if returns false for layer that is blank', () {
       final infrastructureLayer = <Layer>{Layer('', '')};
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('domain');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.containsBannedLayer(infrastructureLayer);
+      final result = testImport.containsBannedLayer(infrastructureLayer);
 
       expect(result, false);
     });
 
     test('Test if returns false for layer that is not banned', () {
       final infrastructureLayer = <Layer>{Layer('Infra', 'infrastructure')};
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('domain');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.containsBannedLayer(infrastructureLayer);
+      final result = testImport.containsBannedLayer(infrastructureLayer);
 
       expect(result, false);
     });
 
     test('Test if returns true for layer that is banned', () {
       final domainLayer = <Layer>{Layer('Domain', 'domain')};
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('domain');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.containsBannedLayer(domainLayer);
+      final result = testImport.containsBannedLayer(domainLayer);
 
       expect(result, true);
     });
@@ -98,12 +98,12 @@ void main() {
           layer: Layer('Domain', 'domain'),
         ),
       ];
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn(null);
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.getConfigFromLastInPath(domainConfig);
+      final result = testImport.getConfigFromLastInPath(domainConfig);
 
       expect(result, null);
     });
@@ -115,12 +115,12 @@ void main() {
           layer: Layer('', ''),
         ),
       ];
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('domain');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.getConfigFromLastInPath(blankConfig);
+      final result = testImport.getConfigFromLastInPath(blankConfig);
 
       expect(result, null);
     });
@@ -132,12 +132,12 @@ void main() {
           layer: Layer('Infra', 'infrastructure'),
         ),
       ];
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('domain');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.getConfigFromLastInPath(
+      final result = testImport.getConfigFromLastInPath(
         infrastructureConfig,
       );
 
@@ -151,12 +151,12 @@ void main() {
           layer: Layer('Domain', 'domain'),
         ),
       ];
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('domain');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.getConfigFromLastInPath(domainConfig);
+      final result = testImport.getConfigFromLastInPath(domainConfig);
 
       expect(result, TypeMatcher<LayerConfig>());
     });
@@ -172,12 +172,12 @@ void main() {
           layer: Layer('Use Case', '(use_case)'),
         ),
       ];
-      final importDirective = TestImportDirective();
+      final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('/domain/use_case/feature/');
-      when(() => importDirective.uri).thenReturn(testUri);
+      when(() => testImport.uri).thenReturn(testUri);
 
-      final result = importDirective.getConfigFromLastInPath(domainConfig);
+      final result = testImport.getConfigFromLastInPath(domainConfig);
 
       expect(
         result,
@@ -186,6 +186,169 @@ void main() {
           layer: Layer('Use Case', '(use_case)'),
         ),
       );
+    });
+  });
+
+  group('isRelative', () {
+    test('Returns false If the path is null', () {
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn(null);
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.isRelative;
+
+      expect(result, false);
+    });
+
+    test('Returns false If the path is empty', () {
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.isRelative;
+
+      expect(result, false);
+    });
+
+    test('Returns false If the path is an absolute variant', () {
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('package:test/test.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.isRelative;
+
+      expect(result, false);
+    });
+
+    test('Returns true If path is exact file name', () {
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('some_file.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.isRelative;
+
+      expect(result, true);
+    });
+
+    test('Returns true If path is a file in an upper catalog', () {
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('../some_file.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.isRelative;
+
+      expect(result, true);
+    });
+
+    test('Returns true If path is a file in an nested catalog catalog', () {
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('../../some_file.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.isRelative;
+
+      expect(result, true);
+    });
+  });
+
+  group('existsInBannedLayers', () {
+    test('Returns false If layer list is empty', () {
+      final emptyList = <Layer>[];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('path');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers('', emptyList);
+
+      expect(result, false);
+    });
+
+    test('Returns false If path is null', () {
+      final domainConfig = <Layer>[Layer('Domain', 'domain')];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers('', domainConfig);
+
+      expect(result, false);
+    });
+
+    test('Returns false If path is null', () {
+      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn(null);
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers('', domainConfig);
+
+      expect(result, false);
+    });
+
+    test('Returns false If source path is empty', () {
+      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn(null);
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers('', domainConfig);
+
+      expect(result, false);
+    });
+
+    test('Returns true If path corresponds to the same layer', () {
+      final domainConfig = <Layer>[Layer('Use case', '(use_cases)')];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('test.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers(
+        'package:src/domain/use_cases/source.dart',
+        domainConfig,
+      );
+
+      expect(result, true);
+    });
+
+    test('Returns true If path corresponds to the upper banned layer', () {
+      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('../test.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers(
+        'package:src/domain/use_cases/source.dart',
+        domainConfig,
+      );
+
+      expect(result, true);
+    });
+
+    test('Returns true If path corresponds to the nested upper banned layer', () {
+      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final testImport = TestImportDirective();
+      final testUri = TestStringLiteral();
+      when(() => testUri.stringValue).thenReturn('../../test.dart');
+      when(() => testImport.uri).thenReturn(testUri);
+
+      final result = testImport.existsInBannedLayers(
+        'package:src/domain/use_cases/nested/source.dart',
+        domainConfig,
+      );
+
+      expect(result, true);
     });
   });
 }

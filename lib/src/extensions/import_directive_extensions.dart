@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
@@ -34,5 +36,37 @@ extension ImportDirectiveExtension on ImportDirective {
     final biggestIndex = configMap.keys.max;
 
     return configMap[biggestIndex];
+  }
+
+  bool get isRelative {
+    if (uri.stringValue == null) return false;
+    if (uri.stringValue!.isEmpty) return false;
+    if (Uri.parse(uri.stringValue!).isAbsolute) return false;
+    return true;
+  }
+
+  bool existsInBannedLayers(String sourceFile, List<Layer> layers) {
+    if (uri.stringValue == null) return false;
+    if (uri.stringValue!.isEmpty) return false;
+    if (sourceFile.isEmpty) return false;
+    final parts = uri.stringValue!.split('/');
+
+    // Relative path can hold zero or more nesting, so we need
+    // to recreate the absolute path for any of given case:
+    // ../../test_file.dart
+    // ../test_file.dart
+    // test_file.dart
+    var root = File(sourceFile).parent;
+    parts.where((part) => part == '..').forEach((_) {
+      root = root.parent;
+    });
+
+    for (final layer in layers) {
+      if (RegExp(layer.path).hasMatch(root.path)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

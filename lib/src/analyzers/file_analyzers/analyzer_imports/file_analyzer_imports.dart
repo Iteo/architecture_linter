@@ -39,6 +39,10 @@ class FileAnalyzerImports implements FileAnalyzer {
 
       if (bannedLayers == null) return;
 
+      if (import.isRelative) {
+        // import.existsInBannedLayers(bannedLayers);
+      }
+
       if (import.containsBannedLayer(bannedLayers)) {
         final layerConfig = import.getConfigFromLastInPath(config.layersConfig);
         final severity = _getNearestSeverity(
