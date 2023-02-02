@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:path/path.dart' as path;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
@@ -45,24 +45,17 @@ extension ImportDirectiveExtension on ImportDirective {
     return true;
   }
 
-  bool existsInBannedLayers(String sourceFile, List<Layer> layers) {
+  bool existsInBannedLayers(String sourceFile, Set<Layer> layers) {
     if (uri.stringValue == null) return false;
     if (uri.stringValue!.isEmpty) return false;
     if (sourceFile.isEmpty) return false;
-    final parts = uri.stringValue!.split('/');
 
-    // Relative path can hold zero or more nesting, so we need
-    // to recreate the absolute path for any of given case:
-    // ../../test_file.dart
-    // ../test_file.dart
-    // test_file.dart
-    var root = File(sourceFile).parent;
-    parts.where((part) => part == '..').forEach((_) {
-      root = root.parent;
-    });
+    final absoluteImport = path.normalize(
+      path.join(sourceFile, '../', uri.stringValue!),
+    );
 
     for (final layer in layers) {
-      if (RegExp(layer.path).hasMatch(root.path)) {
+      if (RegExp(layer.path).hasMatch(absoluteImport)) {
         return true;
       }
     }

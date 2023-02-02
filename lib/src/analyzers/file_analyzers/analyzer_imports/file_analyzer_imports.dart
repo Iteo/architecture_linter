@@ -39,27 +39,35 @@ class FileAnalyzerImports implements FileAnalyzer {
 
       if (bannedLayers == null) return;
 
-      if (import.isRelative) {
-        // import.existsInBannedLayers(bannedLayers);
+      //TODO Fix infrastructure in view banned import
+
+      if (import.isRelative &&
+          !import.existsInBannedLayers(path, bannedLayers)) {
+        return;
       }
 
-      if (import.containsBannedLayer(bannedLayers)) {
-        final layerConfig = import.getConfigFromLastInPath(config.layersConfig);
-        final severity = _getNearestSeverity(
-          layerConfig?.severity,
-          config.lintSeverity,
-          config.bannedImportSeverities[currentLayer],
-        );
-
-        yield unitResult.getBannedLayerLint(
-          import,
-          currentLayer.displayName,
-          lintCode,
-          severity,
-          showCode: !isCli,
-        );
+      if (!import.isRelative && !import.containsBannedLayer(bannedLayers)) {
+        return;
       }
+
+      final layerConfig = import.getConfigFromLastInPath(
+        config.layersConfig,
+      );
+      final severity = _getNearestSeverity(
+        layerConfig?.severity,
+        config.lintSeverity,
+        config.bannedImportSeverities[currentLayer],
+      );
+
+      yield unitResult.getBannedLayerLint(
+        import,
+        currentLayer.displayName,
+        lintCode,
+        severity,
+        showCode: !isCli,
+      );
     }
+
     return;
   }
 
@@ -68,7 +76,7 @@ class FileAnalyzerImports implements FileAnalyzer {
     ProjectConfiguration config,
   ) {
     for (final layer in config.layers) {
-      final isLayerNameInPath = path.contains(RegExp(layer.path));
+      final isLayerNameInPath = RegExp(layer.path).hasMatch(path);
       if (isLayerNameInPath) return layer;
     }
     return null;

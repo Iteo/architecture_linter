@@ -259,7 +259,7 @@ void main() {
 
   group('existsInBannedLayers', () {
     test('Returns false If layer list is empty', () {
-      final emptyList = <Layer>[];
+      final emptyList = <Layer>{};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('path');
@@ -271,7 +271,7 @@ void main() {
     });
 
     test('Returns false If path is null', () {
-      final domainConfig = <Layer>[Layer('Domain', 'domain')];
+      final domainConfig = <Layer>{Layer('Domain', 'domain')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('');
@@ -283,7 +283,7 @@ void main() {
     });
 
     test('Returns false If path is null', () {
-      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final domainConfig = <Layer>{Layer('Domain', '(domain)')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn(null);
@@ -295,7 +295,7 @@ void main() {
     });
 
     test('Returns false If source path is empty', () {
-      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final domainConfig = <Layer>{Layer('Domain', '(domain)')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn(null);
@@ -307,7 +307,7 @@ void main() {
     });
 
     test('Returns true If path corresponds to the same layer', () {
-      final domainConfig = <Layer>[Layer('Use case', '(use_cases)')];
+      final domainConfig = <Layer>{Layer('Use case', '(use_cases)')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('test.dart');
@@ -322,7 +322,7 @@ void main() {
     });
 
     test('Returns true If path corresponds to the upper banned layer', () {
-      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final domainConfig = <Layer>{Layer('Domain', '(domain)')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('../test.dart');
@@ -337,7 +337,7 @@ void main() {
     });
 
     test('Returns true If path corresponds to the nested upper banned layer', () {
-      final domainConfig = <Layer>[Layer('Domain', '(domain)')];
+      final domainConfig = <Layer>{Layer('Domain', '(domain)')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
       when(() => testUri.stringValue).thenReturn('../../test.dart');
