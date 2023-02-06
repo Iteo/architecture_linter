@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';

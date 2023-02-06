@@ -140,6 +140,9 @@ For example:
     - &repository
       name: "repository"
       path: "(repository)"
+    - &useCaseLayer
+      name: "Domain/UseCases"
+      path: "(domain/use_cases)"
 
   layers_config:
     - layer: *repository
@@ -149,6 +152,10 @@ For example:
   
   banned_imports:
     - layer: *presentationLayer
+      banned:
+        - *domainLayer
+    - layer: *useCaseLayer
+      # You can also ban same origin layers
       banned:
         - *domainLayer
     - layer: *infrastructureLayer
