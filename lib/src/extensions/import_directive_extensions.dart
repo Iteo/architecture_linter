@@ -1,9 +1,9 @@
-import 'package:path/path.dart' as path;
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
+
 
 extension ImportDirectiveExtension on ImportDirective {
   // TODO(tomkad99): Supply unit test
@@ -50,7 +50,7 @@ extension ImportDirectiveExtension on ImportDirective {
     if (sourceFile.isEmpty) return false;
 
     final absoluteImport = path.normalize(
-      path.join(sourceFile, '../', uri.stringValue!),
+      path.join(sourceFile, '../', uri.stringValue),
     );
 
     for (final layer in layers) {

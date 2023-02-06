@@ -158,7 +158,7 @@ void main() {
 
       final result = testImport.getConfigFromLastInPath(domainConfig);
 
-      expect(result, TypeMatcher<LayerConfig>());
+      expect(result, const TypeMatcher<LayerConfig>());
     });
 
     test('Test if returns a config for the last one in path', () {
@@ -336,7 +336,8 @@ void main() {
       expect(result, true);
     });
 
-    test('Returns true If path corresponds to the nested upper banned layer', () {
+    test('Returns true If path corresponds to the nested upper banned layer',
+        () {
       final domainConfig = <Layer>{Layer('Domain', '(domain)')};
       final testImport = TestImportDirective();
       final testUri = TestStringLiteral();
