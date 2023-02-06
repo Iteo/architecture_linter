@@ -39,14 +39,7 @@ class FileAnalyzerImports implements FileAnalyzer {
 
       if (bannedLayers == null) return;
 
-      //TODO Fix infrastructure in view banned import
-
-      if (import.isRelative &&
-          !import.existsInBannedLayers(path, bannedLayers)) {
-        return;
-      }
-
-      if (!import.isRelative && !import.containsBannedLayer(bannedLayers)) {
+      if (!resolvedAsBannedImport(import, path, bannedLayers)) {
         return;
       }
 
@@ -92,5 +85,17 @@ class FileAnalyzerImports implements FileAnalyzer {
     }
 
     return layerConfigSeverity ?? configLintSeverity;
+  }
+
+  bool resolvedAsBannedImport(
+    ImportDirective import,
+    String path,
+    Set<Layer> bannedLayers,
+  ) {
+    if (import.isRelative) {
+      return import.existsInBannedLayers(path, bannedLayers);
+    } else {
+      return import.containsBannedLayer(bannedLayers);
+    }
   }
 }
