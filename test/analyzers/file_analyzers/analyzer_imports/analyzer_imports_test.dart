@@ -9,6 +9,7 @@ import '../../../mocks/config.dart';
 void main() {
   final domainPath = '/domain/';
   final infrastructurePath = '/infrastructure/';
+  final presentationPath = '/presentation/';
 
   final architectureAnalyzerImports =
       ArchitectureAnalyzerMocks.baseArchitectureAnalyzer;
@@ -93,6 +94,21 @@ void main() {
         firstLintSeverity.severity,
         config.bannedImportSeverities.entries.first.value.analysisErrorSeverity,
       );
+    },
+  );
+
+  test(
+    'Tests if analyzer will not return lint for file that matches layer regex',
+    () async {
+      final presentationClassUnit = await FileParseHelper.parseTestFile(
+          '${presentationPath}presentation_class.dart') as ResolvedUnitResult;
+
+      final lints = architectureAnalyzerImports.runAnalysis(
+        presentationClassUnit,
+        config,
+      );
+
+      expect(lints.length, 0);
     },
   );
 }
