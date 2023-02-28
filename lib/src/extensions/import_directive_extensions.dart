@@ -2,13 +2,16 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:collection/collection.dart';
+import 'package:path/path.dart' as path;
 
 extension ImportDirectiveExtension on ImportDirective {
   // TODO Supply unit test
   bool containsBannedLayer(Set<Layer> bannedLayers) {
+    final directoryName = path.dirname(uri.stringValue ?? '');
+
     for (final banned in bannedLayers) {
       if (uri.stringValue != null &&
-          RegExp(banned.path).hasMatch(uri.stringValue!)) {
+          RegExp(banned.path).hasMatch(directoryName)) {
         return true;
       }
     }

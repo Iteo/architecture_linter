@@ -51,6 +51,8 @@ class ConfigMocks {
       if (layer != modelLayer) {
         map[layer] = layers
             .where((element) => element != layer && element != modelLayer)
+            .where((element) =>
+                !(layer == presentationLayer && element == domainLayer))
             .toSet();
       }
     }

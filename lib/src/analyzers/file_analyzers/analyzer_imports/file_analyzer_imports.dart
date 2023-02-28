@@ -5,7 +5,7 @@ import 'package:architecture_linter/src/analyzers/file_analyzers/file_analyzer.d
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
-import 'package:architecture_linter/src/extensions/custom_lint_extensions.dart';
+import 'package:architecture_linter/src/extensions/import_directive_extensions.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/lints.dart';
 
 class FileAnalyzerImports implements FileAnalyzer {

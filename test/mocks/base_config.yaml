@@ -42,7 +42,6 @@ architecture_linter:
     - layer: *presentationLayer
       banned:
         - *dataLayer
-        - *domainLayer
         - *infrastructureLayer
     - layer: *infrastructureLayer
       severity: info

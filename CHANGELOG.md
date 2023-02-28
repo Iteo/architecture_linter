@@ -1,5 +1,6 @@
 ## 0.0.10
 - feat: Unified keyword case
+- fix: File interpreted as layer
 
 ## 0.0.9
 - fix: Removed unhandled banned class names
