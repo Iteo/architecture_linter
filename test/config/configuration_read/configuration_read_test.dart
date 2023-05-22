@@ -6,12 +6,12 @@ import '../../mocks/config.dart';
 
 void main() {
   test(
-    "Test if configuration is read properly ",
+    'Test if configuration is read properly ',
     () async {
-      final map = await FileParseHelper.parseYamlFile("base_config.yaml");
-      final configMap = map["architecture_linter"];
+      final map = await FileParseHelper.parseYamlFile('base_config.yaml');
+      final configMap = map['architecture_linter'];
       final config =
-          ProjectConfiguration.fromMap(configMap as Map<dynamic, dynamic>);
+          ProjectConfiguration.fromMap(configMap as Map<String, dynamic>);
 
       expect(
         config,

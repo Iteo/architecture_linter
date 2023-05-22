@@ -7,18 +7,18 @@ class LayerConfig {
     required this.layer,
   });
 
-  final Layer layer;
-  final LintSeverity severity;
-
   factory LayerConfig.fromMap(Map<dynamic, dynamic> map) {
-    final layer = Layer.fromMap(map['layer']);
-    final severity = lintSeverityFromString(map['severity']);
+    final layer = Layer.fromMap(map['layer'] as Map);
+    final severity = lintSeverityFromString(map['severity'] as String?);
 
     return LayerConfig(
       severity: severity,
       layer: layer,
     );
   }
+
+  final Layer layer;
+  final LintSeverity severity;
 
   @override
   bool operator ==(Object other) {

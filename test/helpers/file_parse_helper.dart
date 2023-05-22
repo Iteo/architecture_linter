@@ -17,7 +17,8 @@ class FileParseHelper {
       );
 
   static Future<Map<dynamic, dynamic>> parseYamlFile(
-      String pathFromMocks) async {
+    String pathFromMocks,
+  ) async {
     final unit = await FileParseHelper.parseTestFile(pathFromMocks)
         as ResolvedUnitResult;
 

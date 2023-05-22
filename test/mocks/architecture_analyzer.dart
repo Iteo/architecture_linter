@@ -5,5 +5,5 @@ class ArchitectureAnalyzerMocks {
   const ArchitectureAnalyzerMocks._();
 
   static final baseArchitectureAnalyzer =
-      ArchitectureAnalyzer(currentFileAnalyzers: [FileAnalyzerImports()]);
+      ArchitectureAnalyzer(currentFileAnalyzers: [const FileAnalyzerImports()]);
 }

@@ -33,7 +33,7 @@ abstract class BaseCommand extends Command<void> {
       validateSdkPath();
       validateTargetDirectoriesOrFiles();
     } on InvalidArgumentException catch (e) {
-      throw usageException(e.message);
+      usageException(e.message);
     }
     return runCommand();
   }
@@ -62,7 +62,7 @@ abstract class BaseCommand extends Command<void> {
       const exceptionMessage =
           'Invalid number of directories or files. At least one must be specified.';
 
-      throw InvalidArgumentException(exceptionMessage);
+      throw const InvalidArgumentException(exceptionMessage);
     }
 
     for (final relativePath in argResults.rest) {

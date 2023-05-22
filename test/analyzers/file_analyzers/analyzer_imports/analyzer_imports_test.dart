@@ -7,9 +7,9 @@ import '../../../mocks/architecture_analyzer.dart';
 import '../../../mocks/config.dart';
 
 void main() {
-  final domainPath = '/domain/';
-  final infrastructurePath = '/infrastructure/';
-  final presentationPath = '/presentation/';
+  const domainPath = '/domain/';
+  const infrastructurePath = '/infrastructure/';
+  const presentationPath = '/presentation/';
 
   final architectureAnalyzerImports =
       ArchitectureAnalyzerMocks.baseArchitectureAnalyzer;
@@ -34,7 +34,8 @@ void main() {
     'Tests if analyzer will respect // ignore and return one lint',
     () async {
       final domainClassUnit = await FileParseHelper.parseTestFile(
-          '${domainPath}domain_class_ignore.dart') as ResolvedUnitResult;
+        '${domainPath}domain_class_ignore.dart',
+      ) as ResolvedUnitResult;
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
@@ -72,8 +73,10 @@ void main() {
       );
       final firstLintSeverity = lints.first;
 
-      expect(firstLintSeverity.severity,
-          config.lintSeverity.analysisErrorSeverity);
+      expect(
+        firstLintSeverity.severity,
+        config.lintSeverity.analysisErrorSeverity,
+      );
     },
   );
 
@@ -81,8 +84,8 @@ void main() {
     'Tests if analyzer will respect banned layer severity config',
     () async {
       final domainClassUnit = await FileParseHelper.parseTestFile(
-              '${infrastructurePath}infrastructure_class.dart')
-          as ResolvedUnitResult;
+        '${infrastructurePath}infrastructure_class.dart',
+      ) as ResolvedUnitResult;
 
       final lints = architectureAnalyzerImports.runAnalysis(
         domainClassUnit,
@@ -101,7 +104,8 @@ void main() {
     'Tests if analyzer will not return lint for file that matches layer regex',
     () async {
       final presentationClassUnit = await FileParseHelper.parseTestFile(
-          '${presentationPath}presentation_class.dart') as ResolvedUnitResult;
+        '${presentationPath}presentation_class.dart',
+      ) as ResolvedUnitResult;
 
       final lints = architectureAnalyzerImports.runAnalysis(
         presentationClassUnit,

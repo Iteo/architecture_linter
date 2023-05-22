@@ -40,8 +40,8 @@ class ConfigMocks {
     infrastructureLayer
   ];
   static List<Glob> excludes = [
-    Glob("**.g.dart"),
-    Glob("**/some_folder/**"),
+    Glob('**.g.dart'),
+    Glob('**/some_folder/**'),
   ];
 
   static Map<Layer, Set<Layer>> get bannedImports {
@@ -51,8 +51,10 @@ class ConfigMocks {
       if (layer != modelLayer) {
         map[layer] = layers
             .where((element) => element != layer && element != modelLayer)
-            .where((element) =>
-                !(layer == presentationLayer && element == domainLayer))
+            .where(
+              (element) =>
+                  !(layer == presentationLayer && element == domainLayer),
+            )
             .toSet();
       }
     }

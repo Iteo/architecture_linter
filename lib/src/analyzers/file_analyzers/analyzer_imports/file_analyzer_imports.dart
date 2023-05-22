@@ -1,12 +1,12 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer_plugin/protocol/protocol_common.dart';
+import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/lints.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/file_analyzer.dart';
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:architecture_linter/src/extensions/import_directive_extensions.dart';
-import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/lints.dart';
 
 class FileAnalyzerImports implements FileAnalyzer {
   const FileAnalyzerImports({
@@ -16,7 +16,7 @@ class FileAnalyzerImports implements FileAnalyzer {
   final bool isCli;
 
   @override
-  String get lintCode => "architecture_linter_banned_layer";
+  String get lintCode => 'architecture_linter_banned_layer';
 
   @override
   Iterable<AnalysisError> analyzeFile(

@@ -6,10 +6,9 @@ import 'package:analyzer_plugin/protocol/protocol_common.dart';
 import 'package:analyzer_plugin/protocol/protocol_generated.dart';
 import 'package:architecture_linter/src/analyzers/architecture_analyzer/architecture_analyzer.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/file_analyzer_imports.dart';
+import 'package:architecture_linter/src/configuration/configuration_lints.dart';
+import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:architecture_linter/src/utils/analyzer_utils.dart';
-
-import '../configuration/configuration_lints.dart';
-import '../configuration/project_configuration.dart';
 
 class AnalyzerPlugin extends ServerPlugin {
   AnalyzerPlugin({
@@ -78,7 +77,7 @@ class AnalyzerPlugin extends ServerPlugin {
 
       if (isUnitExcluded || !isPathLayer) return [];
 
-      final currentFileAnalyzers = [FileAnalyzerImports()];
+      final currentFileAnalyzers = [const FileAnalyzerImports()];
       final architectureAnalyzer =
           ArchitectureAnalyzer(currentFileAnalyzers: currentFileAnalyzers);
       return architectureAnalyzer.generateAnalysisErrors(resolvedUnit, config);

@@ -9,9 +9,9 @@ class DirectoryMock extends Mock implements Directory {}
 class ArgResultsMock extends Mock implements ArgResults {}
 
 class TestCommand extends BaseCommand {
-  final ArgResults _results;
-
   TestCommand(this._results);
+
+  final ArgResults _results;
 
   @override
   ArgResults get argResults => _results;

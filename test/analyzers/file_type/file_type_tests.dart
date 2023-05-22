@@ -6,13 +6,13 @@ import '../../mocks/architecture_analyzer.dart';
 import '../../mocks/config.dart';
 
 void main() {
-  final domainPath = '/domain/';
+  const domainPath = '/domain/';
 
   final architectureAnalyzerImports =
       ArchitectureAnalyzerMocks.baseArchitectureAnalyzer;
   final config = ConfigMocks.baseConfigMock;
 
-  test("Test if other type than dart will be analyzed", () async {
+  test('Test if other type than dart will be analyzed', () async {
     final htmlFileUnit =
         await FileParseHelper.parseTestFile('${domainPath}html_file.html')
             as ResolvedUnitResult;

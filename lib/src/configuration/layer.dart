@@ -1,7 +1,4 @@
 class Layer {
-  final String displayName;
-  final String path;
-
   Layer(
     this.displayName,
     this.path,
@@ -9,10 +6,13 @@ class Layer {
 
   factory Layer.fromMap(Map<dynamic, dynamic> map) {
     return Layer(
-      map['name'],
-      map['path'],
+      map['name'] as String,
+      map['path'] as String,
     );
   }
+
+  final String displayName;
+  final String path;
 
   @override
   bool operator ==(Object other) {

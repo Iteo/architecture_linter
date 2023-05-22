@@ -3,7 +3,7 @@ import 'package:architecture_linter/src/cli/models/cli_report.dart';
 import 'package:architecture_linter/src/cli/models/cli_severity.dart';
 
 extension AnalysisErrorExtension on AnalysisError {
-  String get cliPrint => '${severity.name.toString().toUpperCase()}: $message';
+  String get cliPrint => '${severity.name.toUpperCase()}: $message';
 }
 
 extension IterableAnalysisErrorExtension on Iterable<AnalysisError> {
@@ -17,12 +17,12 @@ extension IterableAnalysisErrorExtension on Iterable<AnalysisError> {
   }
 
   String getStringReport(String filePath) {
-    final header = "\n$filePath:\n";
+    final header = '\n$filePath:\n';
 
-    String content = '';
+    final content = StringBuffer();
 
     for (final analysisError in this) {
-      content += '${analysisError.cliPrint}\n';
+      content.write('${analysisError.cliPrint}\n');
     }
     return '$header$content';
   }
