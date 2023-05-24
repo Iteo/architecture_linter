@@ -5,14 +5,15 @@ import '../../helpers/file_parse_helper.dart';
 import '../../mocks/config.dart';
 
 void main() {
-  final domainPath = '/domain/';
+  const domainPath = '/domain/';
   final config = ConfigMocks.baseConfigMock;
 
   test(
-    "Tests exclude on file pattern",
+    'Tests exclude on file pattern',
     () async {
       final domainClassUnit = await FileParseHelper.parseTestFile(
-          '${domainPath}domain_class.g.dart') as ResolvedUnitResult;
+        '${domainPath}domain_class.g.dart',
+      ) as ResolvedUnitResult;
 
       final unitPath = domainClassUnit.path;
       expect(config.isPathExcluded(unitPath), true);
@@ -20,10 +21,11 @@ void main() {
   );
 
   test(
-    "Tests exclude on folder pattern",
+    'Tests exclude on folder pattern',
     () async {
       final domainClassUnit = await FileParseHelper.parseTestFile(
-          '${domainPath}some_folder/domain_class.dart') as ResolvedUnitResult;
+        '${domainPath}some_folder/domain_class.dart',
+      ) as ResolvedUnitResult;
 
       final unitPath = domainClassUnit.path;
       expect(config.isPathExcluded(unitPath), true);

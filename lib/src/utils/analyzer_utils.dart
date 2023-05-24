@@ -9,9 +9,9 @@ import 'package:analyzer/file_system/overlay_file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
 import 'package:architecture_linter/src/configuration_reader/configuration_reader.dart';
+import 'package:file/local.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart';
-import 'package:file/local.dart';
 
 Set<String> getFilePaths(
   Iterable<String> folders,
@@ -36,20 +36,24 @@ Set<String> _extractDartFilesFromFolders(
   Iterable<Glob> globalExcludes,
 ) =>
     folders
-        .expand((fileSystemEntity) => (fileSystemEntity.endsWith('.dart')
-                ? Glob(fileSystemEntity)
-                : Glob('**/**.dart'))
-            .listFileSystemSync(
-              const LocalFileSystem(),
-              root: rootFolder,
-              followLinks: false,
-            )
-            .whereType<io.File>()
-            .where((entity) => !isExcluded(
+        .expand(
+          (fileSystemEntity) => (fileSystemEntity.endsWith('.dart')
+                  ? Glob(fileSystemEntity)
+                  : Glob('**/**.dart'))
+              .listFileSystemSync(
+                const LocalFileSystem(),
+                root: rootFolder,
+                followLinks: false,
+              )
+              .whereType<io.File>()
+              .where(
+                (entity) => !isExcluded(
                   relative(entity.path, from: rootFolder),
                   globalExcludes,
-                ))
-            .map((entity) => normalize(entity.path)))
+                ),
+              )
+              .map((entity) => normalize(entity.path)),
+        )
         .toSet();
 
 bool isExcluded(String absolutePath, Iterable<Glob> excludes) =>
@@ -62,13 +66,15 @@ bool _hasMatch(String absolutePath, Iterable<Glob> excludes) {
 }
 
 Future<ProjectConfiguration?> createConfig(
-    AnalysisContext analysisContext) async {
+  AnalysisContext analysisContext,
+) async {
   final optionsFile = analysisContext.contextRoot.optionsFile;
 
   if (optionsFile != null && optionsFile.exists) {
     if (optionsFile.readAsStringSync().isEmpty) {
       return await ConfigurationReader.readConfigurationFromPath(
-          optionsFile.path);
+        optionsFile.path,
+      );
     }
 
     return ConfigurationReader.readConfiguration(optionsFile);

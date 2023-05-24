@@ -4,7 +4,7 @@ import 'exclude/exclude_test.dart' as exclude;
 import 'severity/severity_test.dart' as severity;
 
 void main() {
-  group("Project configuration read tests", configuration_read.main);
-  group("Exclude tests", exclude.main);
-  group("Severity tests", severity.main);
+  group('Project configuration read tests', configuration_read.main);
+  group('Exclude tests', exclude.main);
+  group('Severity tests', severity.main);
 }

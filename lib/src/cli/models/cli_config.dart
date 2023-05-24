@@ -5,9 +5,7 @@ import 'package:args/args.dart';
 class CliConfig {
   const CliConfig(this.exitOnSeverityLevel);
 
-  final CliSeverity exitOnSeverityLevel;
-
-  factory CliConfig.defaultConfig() => CliConfig(CliSeverity.warning);
+  factory CliConfig.defaultConfig() => const CliConfig(CliSeverity.warning);
 
   factory CliConfig.fromArgsMap(ArgResults argResults) {
     try {
@@ -20,4 +18,6 @@ class CliConfig {
       return CliConfig.defaultConfig();
     }
   }
+
+  final CliSeverity exitOnSeverityLevel;
 }

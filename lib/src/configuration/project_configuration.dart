@@ -1,9 +1,9 @@
+import 'package:architecture_linter/src/configuration/banned_imports.dart';
+import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
+import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:collection/collection.dart';
 import 'package:glob/glob.dart';
-import '../configuration/layer.dart';
-import '../configuration/banned_imports.dart';
-import 'lint_severity.dart';
 
 const keyLayers = 'layers';
 const keyExcludes = 'excludes';
@@ -12,13 +12,6 @@ const keyLayersConfig = 'layers_config';
 const keyLintSeverity = 'lint_severity';
 
 class ProjectConfiguration {
-  final List<Layer> layers;
-  final List<Glob> excludes;
-  final Map<Layer, Set<Layer>> bannedImports;
-  final Map<Layer, LintSeverity> bannedImportSeverities;
-  final LintSeverity lintSeverity;
-  final List<LayerConfig> layersConfig;
-
   ProjectConfiguration(
     this.layers,
     this.excludes,
@@ -32,18 +25,19 @@ class ProjectConfiguration {
     final layers = map[keyLayers] == null
         ? <Layer>[]
         : List<Layer>.from(
-            (map[keyLayers] as Iterable).map((x) => Layer.fromMap(x)),
+            (map[keyLayers] as Iterable).map((x) => Layer.fromMap(x as Map)),
           );
     final excludes = map[keyExcludes] == null
         ? <Glob>[]
         : List<Glob>.from(
-            ((map[keyExcludes] as Iterable).map((source) => Glob(source))),
+            (map[keyExcludes] as Iterable)
+                .map((source) => Glob(source as String)),
           );
     final bannedImportsList = map[keyBannedImports] == null
         ? <BannedImports>[]
         : List<BannedImports>.from(
             (map[keyBannedImports] as Iterable)
-                .map((x) => BannedImports.fromMap(x)),
+                .map((x) => BannedImports.fromMap(x as Map)),
           );
 
     final bannedImportsMap = <Layer, Set<Layer>>{};
@@ -57,11 +51,11 @@ class ProjectConfiguration {
       }
     }
 
-    final lintSeverity = lintSeverityFromString(map[keyLintSeverity]);
+    final lintSeverity = lintSeverityFromString(map[keyLintSeverity] as String);
     final layersConfig = map[keyLayersConfig] == null
         ? <LayerConfig>[]
         : (map[keyLayersConfig] as Iterable)
-            .map((e) => LayerConfig.fromMap(e))
+            .map((e) => LayerConfig.fromMap(e as Map))
             .toList();
 
     return ProjectConfiguration(
@@ -73,6 +67,13 @@ class ProjectConfiguration {
       layersConfig,
     );
   }
+
+  final List<Layer> layers;
+  final List<Glob> excludes;
+  final Map<Layer, Set<Layer>> bannedImports;
+  final Map<Layer, LintSeverity> bannedImportSeverities;
+  final LintSeverity lintSeverity;
+  final List<LayerConfig> layersConfig;
 
   bool isPathExcluded(String path) => _hasMatch(path, excludes);
 
@@ -102,10 +103,10 @@ class ProjectConfiguration {
     final isLint = lintSeverity == other.lintSeverity;
     final isLayers = layers.equals(other.layers);
     final isExcludes = _isSameGlobs(other.excludes);
-    final isBannedImports =
-        DeepCollectionEquality().equals(bannedImports, other.bannedImports);
+    final isBannedImports = const DeepCollectionEquality()
+        .equals(bannedImports, other.bannedImports);
     final isLayersConfig =
-        DeepCollectionEquality().equals(layersConfig, other.layersConfig);
+        const DeepCollectionEquality().equals(layersConfig, other.layersConfig);
 
     return isLint &&
         isLayers &&

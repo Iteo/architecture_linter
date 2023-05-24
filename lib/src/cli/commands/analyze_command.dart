@@ -7,10 +7,10 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:architecture_linter/src/analyzers/architecture_analyzer/architecture_analyzer.dart';
 import 'package:architecture_linter/src/analyzers/file_analyzers/analyzer_imports/file_analyzer_imports.dart';
 import 'package:architecture_linter/src/cli/commands/base_command.dart';
-import 'package:architecture_linter/src/extensions/analysis_error_extensions.dart';
 import 'package:architecture_linter/src/cli/models/cli_config.dart';
 import 'package:architecture_linter/src/cli/models/cli_severity.dart';
 import 'package:architecture_linter/src/cli/printer/printer.dart';
+import 'package:architecture_linter/src/extensions/analysis_error_extensions.dart';
 import 'package:architecture_linter/src/utils/analyzer_utils.dart';
 import 'package:path/path.dart';
 
@@ -22,10 +22,10 @@ class AnalyzeCommand extends BaseCommand {
   final Printer printer;
 
   @override
-  String get description => "Analyze project for architecture inconsistencies";
+  String get description => 'Analyze project for architecture inconsistencies';
 
   @override
-  String get name => "analyze";
+  String get name => 'analyze';
 
   @override
   Future<void> runCommand() async {
@@ -44,7 +44,7 @@ class AnalyzeCommand extends BaseCommand {
 
     final analyzer = ArchitectureAnalyzer(
       currentFileAnalyzers: [
-        FileAnalyzerImports(isCli: true),
+        const FileAnalyzerImports(isCli: true),
       ],
     );
 
@@ -54,7 +54,7 @@ class AnalyzeCommand extends BaseCommand {
     for (final context in contextCollection.contexts) {
       final config = await createConfig(context);
       if (config == null) {
-        usageException("Configuration not found");
+        usageException('Configuration not found');
       }
 
       final filePaths = getFilePaths(
@@ -89,7 +89,7 @@ class AnalyzeCommand extends BaseCommand {
     exit(exitCode);
   }
 
-  _getExitMessage(int lintCount) {
+  String _getExitMessage(int lintCount) {
     if (lintCount == 0) {
       return '\nAnalyzer has ended with 0 inconsistencies';
     }

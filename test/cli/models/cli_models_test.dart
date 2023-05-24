@@ -15,18 +15,18 @@ void main() {
   );
 
   test(
-    "Tests if whether the correct exit code is being returned",
+    'Tests if whether the correct exit code is being returned',
     () {
-      final config = CliConfigMocks.severityNoneCliConfig;
-      final severity = CliSeverity.error;
+      const config = CliConfigMocks.severityNoneCliConfig;
+      const severity = CliSeverity.error;
       final exitCode = severity.getExitCode(config);
 
       expect(exitCode, 0);
     },
   );
 
-  test("Tests CliSeverity fromString factory", () {
-    final cliSeverityString = " Warning";
+  test('Tests CliSeverity fromString factory', () {
+    const cliSeverityString = ' Warning';
 
     final severity = CliSeverity.fromString(cliSeverityString);
 

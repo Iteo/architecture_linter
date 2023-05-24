@@ -6,7 +6,7 @@ import 'package:architecture_linter/src/cli/printer/printer.dart';
 import 'package:args/command_runner.dart';
 
 class CliRunner extends CommandRunner<void> {
-  CliRunner() : super("analyzer", "Analyze your project architecture") {
+  CliRunner() : super('analyzer', 'Analyze your project architecture') {
     addCommand(AnalyzeCommand(printer));
   }
 

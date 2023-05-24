@@ -16,10 +16,14 @@ void main() {
 
     expect(
       command.validateTargetDirectoriesOrFiles,
-      throwsA(predicate((e) =>
-          e is InvalidArgumentException &&
-          e.message ==
-              'Invalid number of directories or files. At least one must be specified.')),
+      throwsA(
+        predicate(
+          (e) =>
+              e is InvalidArgumentException &&
+              e.message ==
+                  'Invalid number of directories or files. At least one must be specified.',
+        ),
+      ),
     );
   });
 
@@ -29,11 +33,14 @@ void main() {
 
     expect(
       command.validateTargetDirectoriesOrFiles,
-      throwsA(predicate(
-        (e) =>
-            e is InvalidArgumentException &&
-            e.message == "./bil doesn't exist or isn't a directory or a file.",
-      )),
+      throwsA(
+        predicate(
+          (e) =>
+              e is InvalidArgumentException &&
+              e.message ==
+                  "./bil doesn't exist or isn't a directory or a file.",
+        ),
+      ),
     );
   });
 
@@ -45,12 +52,14 @@ void main() {
         () {
           expect(
             command.validateSdkPath,
-            throwsA(predicate(
-              (e) =>
-                  e is InvalidArgumentException &&
-                  e.message ==
-                      'Dart SDK path SDK_PATH does not exist or not a directory.',
-            )),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is InvalidArgumentException &&
+                    e.message ==
+                        'Dart SDK path SDK_PATH does not exist or not a directory.',
+              ),
+            ),
           );
         },
         createDirectory: (path) {
