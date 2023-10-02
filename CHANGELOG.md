@@ -1,3 +1,6 @@
+## 0.2.0
+- fix: Downgrade File version
+
 ## 0.1.0
 - feat: Unified keyword case
 - fix: File interpreted as layer

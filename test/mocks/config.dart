@@ -37,7 +37,7 @@ class ConfigMocks {
     domainLayer,
     presentationLayer,
     modelLayer,
-    infrastructureLayer
+    infrastructureLayer,
   ];
   static List<Glob> excludes = [
     Glob('**.g.dart'),
@@ -63,12 +63,12 @@ class ConfigMocks {
   }
 
   static Map<Layer, LintSeverity> bannedImportsSeverities = {
-    infrastructureLayer: LintSeverity.info
+    infrastructureLayer: LintSeverity.info,
   };
 
   static List<LayerConfig> layersConfig = [
     LayerConfig(severity: LintSeverity.error, layer: modelLayer),
-    LayerConfig(severity: LintSeverity.error, layer: infrastructureLayer)
+    LayerConfig(severity: LintSeverity.error, layer: infrastructureLayer),
   ];
 
   static ProjectConfiguration baseConfigMock = ProjectConfiguration(
