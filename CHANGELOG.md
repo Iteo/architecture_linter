@@ -1,3 +1,6 @@
+## 0.2.1
+- feat: Bump libs versions
+
 ## 0.2.0
 - fix: Downgrade File version
 
