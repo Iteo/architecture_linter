@@ -3,22 +3,10 @@ name: Publish to pub.dev
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   publish:
-    name: 'Publish to pub.dev'
     permissions:
       id-token: write # This is required for requesting the JWT
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout repository
-      - uses: actions/checkout@v3
-      # Setup Dart SDK with JWT token
-      - uses: dart-lang/setup-dart@main
-      # Minimal package setup.
-      - name: Install dependencies
-        run: dart pub get
-      # Publishing...
-      - name: Publish to pub.dev
-        run: dart pub publish -f
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@main
