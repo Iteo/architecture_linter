@@ -5,7 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
 
 extension ImportDirectiveExtension on ImportDirective {
-  // TODO Supply unit test
+  // TODO(tomkad99): Supply unit test
   bool containsBannedLayer(Set<Layer> bannedLayers) {
     final directoryName = path.dirname(uri.stringValue ?? '');
 
