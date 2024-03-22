@@ -1,4 +1,4 @@
-## 0.2.2
+## 0.3.0
 - feat: Support banned relative imports
 
 ## 0.2.1
