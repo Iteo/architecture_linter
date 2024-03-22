@@ -84,7 +84,7 @@ class ProjectConfiguration {
   }
 
   bool isPathLayer(String path) =>
-      layers.any((layer) => path.contains(RegExp(layer.path)));
+      layers.any((layer) => RegExp(layer.path).hasMatch(path));
 
   @override
   int get hashCode => Object.hash(

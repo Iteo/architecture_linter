@@ -1,3 +1,6 @@
+## 0.3.0
+- feat: Support banned relative imports
+
 ## 0.2.1
 - feat: Bump libs versions
 
