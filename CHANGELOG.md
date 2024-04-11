@@ -1,3 +1,7 @@
+## 0.2.2
+- chore: Upgraded analyzer to 6.4.1
+- chore: Upgraded analyzer_plugin to 0.11.3
+
 ## 0.2.1
 - feat: Bump libs versions
 
