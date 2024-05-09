@@ -4,7 +4,6 @@ import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
 
-
 extension ImportDirectiveExtension on ImportDirective {
   // TODO(tomkad99): Supply unit test
   bool containsBannedLayer(Set<Layer> bannedLayers) {
