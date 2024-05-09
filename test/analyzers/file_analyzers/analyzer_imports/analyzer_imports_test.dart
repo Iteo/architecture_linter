@@ -112,6 +112,8 @@ void main() {
         config,
       );
 
+      print(lints);
+
       expect(lints.length, 0);
     },
   );
