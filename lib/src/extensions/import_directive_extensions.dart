@@ -53,7 +53,9 @@ extension ImportDirectiveExtension on ImportDirective {
     );
 
     for (final layer in layers) {
-      if (RegExp(layer.path).hasMatch(absoluteImport)) {
+      // Always check path (/STH) in order to avoid matching file_STH_a.dart
+      final segment = '/${layer.path}';
+      if (RegExp(segment).hasMatch(absoluteImport)) {
         return true;
       }
     }
