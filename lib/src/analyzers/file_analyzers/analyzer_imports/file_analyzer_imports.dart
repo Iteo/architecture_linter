@@ -6,7 +6,7 @@ import 'package:architecture_linter/src/analyzers/file_analyzers/file_analyzer.d
 import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/configuration/project_configuration.dart';
-import 'package:architecture_linter/src/extensions/import_directive_extensions.dart';
+import 'package:architecture_linter/src/utils/import_directive_utils.dart';
 
 class FileAnalyzerImports implements FileAnalyzer {
   const FileAnalyzerImports({
@@ -43,8 +43,9 @@ class FileAnalyzerImports implements FileAnalyzer {
         return;
       }
 
-      final layerConfig = import.getConfigFromLastInPath(
+      final layerConfig = ImportDirectiveUtils.getConfigFromLastInPath(
         config.layersConfig,
+        import.uri.stringValue,
       );
       final severity = _getNearestSeverity(
         layerConfig?.severity,
@@ -92,10 +93,17 @@ class FileAnalyzerImports implements FileAnalyzer {
     String path,
     Set<Layer> bannedLayers,
   ) {
-    if (import.isRelative) {
-      return import.existsInBannedLayers(path, bannedLayers);
+    if (ImportDirectiveUtils.isRelative(import.uri.stringValue)) {
+      return ImportDirectiveUtils.existsInBannedLayers(
+        path,
+        bannedLayers,
+        import.uri.stringValue,
+      );
     } else {
-      return import.containsBannedLayer(bannedLayers);
+      return ImportDirectiveUtils.containsBannedLayer(
+        bannedLayers,
+        import.uri.stringValue,
+      );
     }
   }
 }
