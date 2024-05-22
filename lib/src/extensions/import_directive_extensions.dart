@@ -23,6 +23,7 @@ extension ImportDirectiveExtension on ImportDirective {
 
     for (final config in configs) {
       final gotConfigForPath = uri.stringValue != null &&
+          config.layer.path.isNotEmpty &&
           RegExp(config.layer.path).hasMatch(uri.stringValue!);
       if (gotConfigForPath) {
         final index = uri.stringValue!.indexOf(config.layer.path);
@@ -33,5 +34,32 @@ extension ImportDirectiveExtension on ImportDirective {
     final biggestIndex = configMap.keys.max;
 
     return configMap[biggestIndex];
+  }
+
+  bool get isRelative {
+    if (uri.stringValue == null) return false;
+    if (uri.stringValue!.isEmpty) return false;
+    if (Uri.parse(uri.stringValue!).isAbsolute) return false;
+    return true;
+  }
+
+  bool existsInBannedLayers(String sourceFile, Set<Layer> layers) {
+    if (uri.stringValue == null) return false;
+    if (uri.stringValue!.isEmpty) return false;
+    if (sourceFile.isEmpty) return false;
+
+    final absoluteImport = path.normalize(
+      path.join(sourceFile, '../', uri.stringValue),
+    );
+
+    for (final layer in layers) {
+      // Always check path (/STH) in order to avoid matching file_STH_a.dart
+      final segment = '/${layer.path}';
+      if (RegExp(segment).hasMatch(absoluteImport)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

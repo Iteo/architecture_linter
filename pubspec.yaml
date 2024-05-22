@@ -4,7 +4,7 @@ homepage: https://github.com/Iteo/architecture_linter
 repository: https://github.com/Iteo/architecture_linter
 # Remember, increase also architecture_linter version
 # in tools/analyzer_plugin/pubspec.yaml to the same version
-version: 0.2.2
+version: 0.3.0
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
