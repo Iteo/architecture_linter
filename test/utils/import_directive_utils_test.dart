@@ -69,8 +69,6 @@ void main() {
   });
 
   group('getConfigFromLastInPath', () {
-    const utils = ImportDirectiveUtils;
-
     test('Test if returns null for empty list of layer configurations', () {
       final noConfig = <LayerConfig>[];
 
