@@ -1,5 +1,8 @@
 ## 0.3.0
 - feat: Support banned relative imports
+- chore: Upgraded analyzer to 6.4.1
+- chore: Upgraded analyzer_plugin to 0.11.3
+- chore: Upgraded file to 7.0.1
 
 ## 0.2.2
 - chore: Upgraded analyzer to 6.4.1
