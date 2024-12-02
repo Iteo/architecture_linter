@@ -2,10 +2,7 @@ import 'package:architecture_linter/src/configuration/layer.dart';
 import 'package:architecture_linter/src/configuration/layers_config.dart';
 import 'package:architecture_linter/src/configuration/lint_severity.dart';
 import 'package:architecture_linter/src/utils/import_directive_utils.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-
-class TestLayerConfig extends Mock implements LayerConfig {}
 
 void main() {
   group('containsBannedLayer', () {
@@ -48,7 +45,6 @@ void main() {
       expect(result, false);
     });
 
-    // TODO Correct and finish test
     test('Test if returns false for layer that is not banned', () {
       final infrastructureLayer = <Layer>{Layer('Infra', 'infrastructure')};
 
@@ -65,7 +61,7 @@ void main() {
 
       final result = ImportDirectiveUtils.containsBannedLayer(
         domainLayer,
-        'domain',
+        'domain/test.dart',
       );
 
       expect(result, true);
@@ -208,100 +204,86 @@ void main() {
       expect(result, true);
     });
 
-  // group('existsInBannedLayers', () {
-  //   test('Returns false If layer list is empty', () {
-  //     final noConfig = <Layer>{};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn('path');
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers('', noConfig);
-  //
-  //     expect(result, false);
-  //   });
-  //
-  //   test('Returns false If path is null', () {
-  //     final domainConfig = <Layer>{Layer('Domain', 'domain')};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn('');
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers('', domainConfig);
-  //
-  //     expect(result, false);
-  //   });
-  //
-  //   test('Returns false If path is null', () {
-  //     final domainConfig = <Layer>{Layer('Domain', '(domain)')};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn(null);
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers('', domainConfig);
-  //
-  //     expect(result, false);
-  //   });
-  //
-  //   test('Returns false If source path is empty', () {
-  //     final domainConfig = <Layer>{Layer('Domain', '(domain)')};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn(null);
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers('', domainConfig);
-  //
-  //     expect(result, false);
-  //   });
-  //
-  //   test('Returns true If path corresponds to the same layer', () {
-  //     final domainConfig = <Layer>{Layer('Use case', '(use_cases)')};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn('test.dart');
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers(
-  //       'package:src/domain/use_cases/source.dart',
-  //       domainConfig,
-  //     );
-  //
-  //     expect(result, true);
-  //   });
-  //
-  //   test('Returns true If path corresponds to the upper banned layer', () {
-  //     final domainConfig = <Layer>{Layer('Domain', '(domain)')};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn('../test.dart');
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers(
-  //       'package:src/domain/use_cases/source.dart',
-  //       domainConfig,
-  //     );
-  //
-  //     expect(result, true);
-  //   });
-  //
-  //   test('Returns true If path corresponds to the nested upper banned layer',
-  //       () {
-  //     final domainConfig = <Layer>{Layer('Domain', '(domain)')};
-  //     final testImport = TestImportDirective();
-  //     final testUri = TestStringLiteral();
-  //     when(() => testUri.stringValue).thenReturn('../../test.dart');
-  //     when(() => testImport.uri).thenReturn(testUri);
-  //
-  //     final result = testImport.existsInBannedLayers(
-  //       'package:src/domain/use_cases/nested/source.dart',
-  //       domainConfig,
-  //     );
-  //
-  //     expect(result, true);
-  //   });
-  // });
-});
+    group('existsInBannedLayers', () {
+      test('Returns false If layer list is empty', () {
+        final noConfig = <Layer>{};
+
+        final result = ImportDirectiveUtils.existsInBannedLayers(
+          '',
+          noConfig,
+          'path',
+        );
+
+        expect(result, false);
+      });
+
+      test('Returns false If path is null', () {
+        final domainConfig = <Layer>{Layer('Domain', 'domain')};
+
+        final result = ImportDirectiveUtils.existsInBannedLayers(
+          '',
+          domainConfig,
+          '',
+        );
+
+        expect(result, false);
+      });
+
+      test('Returns false If path is null', () {
+        final domainConfig = <Layer>{Layer('Domain', '(domain)')};
+        final result = ImportDirectiveUtils.existsInBannedLayers(
+          '',
+          domainConfig,
+          null,
+        );
+
+        expect(result, false);
+      });
+
+      test('Returns false If source path is empty', () {
+        final domainConfig = <Layer>{Layer('Domain', '(domain)')};
+
+        final result =
+            ImportDirectiveUtils.existsInBannedLayers('', domainConfig, 'path');
+
+        expect(result, false);
+      });
+
+      test('Returns true If path corresponds to the same layer', () {
+        final domainConfig = <Layer>{Layer('Use case', '(use_cases)')};
+
+        final result = ImportDirectiveUtils.existsInBannedLayers(
+          'package:src/domain/use_cases/source.dart',
+          domainConfig,
+          'test.dart',
+        );
+
+        expect(result, true);
+      });
+
+      test('Returns true If path corresponds to the upper banned layer', () {
+        final domainConfig = <Layer>{Layer('Domain', '(domain)')};
+
+        final result = ImportDirectiveUtils.existsInBannedLayers(
+          'package:src/domain/use_cases/source.dart',
+          domainConfig,
+          '../test.dart',
+        );
+
+        expect(result, true);
+      });
+
+      test('Returns true If path corresponds to the nested upper banned layer',
+          () {
+        final domainConfig = <Layer>{Layer('Domain', '(domain)')};
+        final result = ImportDirectiveUtils.existsInBannedLayers(
+          'package:src/domain/use_cases/nested/source.dart',
+          domainConfig,
+          '../../test.dart',
+        );
+
+        expect(result, true);
+      });
+    });
+  });
 }

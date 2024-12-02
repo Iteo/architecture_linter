@@ -11,8 +11,11 @@ class ImportDirectiveUtils {
   ) {
     final directoryName = path.dirname(importUri ?? '');
 
+    if (importUri == null || importUri.isEmpty) return false;
+
     for (final banned in bannedLayers) {
-      if (importUri != null && RegExp(banned.path).hasMatch(directoryName)) {
+      if (banned.path.isEmpty) continue;
+      if (RegExp(banned.path).hasMatch(directoryName)) {
         return true;
       }
     }
