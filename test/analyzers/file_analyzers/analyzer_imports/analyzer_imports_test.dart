@@ -115,4 +115,40 @@ void main() {
       expect(lints.length, 0);
     },
   );
+
+  test(
+    'Tests if analyzer detects banned imports even when valid import is first',
+    () async {
+      final domainClassUnit = await FileParseHelper.parseTestFile(
+        '${domainPath}domain_class_valid_import_first.dart',
+      ) as ResolvedUnitResult;
+
+      final lints = architectureAnalyzerImports.runAnalysis(
+        domainClassUnit,
+        config,
+      );
+
+      // Should detect the banned import to presentation layer
+      // even though a valid import to domain layer comes first
+      expect(lints.length, 1);
+    },
+  );
+
+  test(
+    'Tests if analyzer detects banned imports after external package imports',
+    () async {
+      final domainClassUnit = await FileParseHelper.parseTestFile(
+        '${domainPath}domain_class_package_import_first.dart',
+      ) as ResolvedUnitResult;
+
+      final lints = architectureAnalyzerImports.runAnalysis(
+        domainClassUnit,
+        config,
+      );
+
+      // Should detect the banned import to presentation layer
+      // even though an external package import comes first
+      expect(lints.length, 1);
+    },
+  );
 }

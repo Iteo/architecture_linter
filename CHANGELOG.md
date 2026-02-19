@@ -1,3 +1,8 @@
+## 0.3.1
+- fix: Banned imports not detected when valid imports precede them
+- chore: Upgraded analyzer to support versions up to 9.0.0
+- chore: Upgraded analyzer_plugin to support versions up to 0.14.0
+
 ## 0.3.0
 - feat: Support banned relative imports
 - chore: Upgraded analyzer to 6.4.1

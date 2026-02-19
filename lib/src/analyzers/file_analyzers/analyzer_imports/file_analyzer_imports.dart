@@ -40,7 +40,7 @@ class FileAnalyzerImports implements FileAnalyzer {
       if (bannedLayers == null) return;
 
       if (!resolvedAsBannedImport(import, path, bannedLayers)) {
-        return;
+        continue;
       }
 
       final layerConfig = ImportDirectiveUtils.getConfigFromLastInPath(
